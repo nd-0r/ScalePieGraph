@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-set(CMAKE_CXX_STANDARD 11)
-project(naive-bayes)
+set(CMAKE_CXX_STANDARD 20)
+project(scale-pie-graph)
 
 # This tells the compiler to not aggressively optimize and
 # to include debugging information so that the debugger
@@ -44,43 +44,32 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
-get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
+get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/model.cc
-                              src/core/image.cc
-                              src/core/trainer.cc
-                              src/core/classifier.cc)
+list(APPEND CORE_SOURCE_FILES src/core/scale.cc
+                              src/core/synthesizer.cc)
 
-list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
-                            src/visualizer/naive_bayes_app.cc
-                            src/visualizer/sketchpad.cc)
+# list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES})
 
-list(APPEND TEST_FILES tests/test_model.cc
-                       tests/test_image.cc
-                       tests/test_trainer.cc
-                       tests/test_classifier.cc)
+# list(APPEND TEST_FILES )
 
-add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})
-target_include_directories(train-model PRIVATE include)
+add_executable(scale-pie-graph-debug apps/main.cpp ${CORE_SOURCE_FILES})
+target_include_directories(scale-pie-graph-debug PRIVATE include)
 
 ci_make_app(
-        APP_NAME        sketchpad-classifier
+        APP_NAME        scale-pie-graph
         CINDER_PATH     ${CINDER_PATH}
         SOURCES         apps/cinder_app_main.cc ${SOURCE_FILES}
         INCLUDES        include
 )
 
 ci_make_app(
-        APP_NAME        naive-bayes-test
+        APP_NAME        scale-pie-graph-test
         CINDER_PATH     ${CINDER_PATH}
         SOURCES         tests/test_main.cc ${SOURCE_FILES} ${TEST_FILES}
         INCLUDES        include
         LIBRARIES       catch2
 )
-
-if(MSVC)
-    set_property(TARGET naive-bayes-test APPEND_STRING PROPERTY LINK_FLAGS " /SUBSYSTEM:CONSOLE")
-endif()
