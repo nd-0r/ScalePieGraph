@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 11)
 project(scale-pie-graph)
 
 # This tells the compiler to not aggressively optimize and
@@ -12,6 +12,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Let's nicely support folders in IDE's
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Add Vpkg as a submodule
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
+        CACHE STRING "Vcpkg toolchain file")
 
 # Warning flags
 if(MSVC)
@@ -44,7 +48,7 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
-get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../" ABSOLUTE)
+get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
@@ -52,11 +56,14 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 list(APPEND CORE_SOURCE_FILES src/core/scale.cc
                               src/core/synthesizer.cc)
 
-# list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES})
+list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
+                            src/frontend/canvas.cc
+                            src/frontend/scale_pie_graph_app.cc)
 
-# list(APPEND TEST_FILES )
+list(APPEND TEST_FILES    tests/test_scale.cc
+                          tests/test_synthesizer.cc)
 
-add_executable(scale-pie-graph-debug apps/main.cpp ${CORE_SOURCE_FILES})
+add_executable(scale-pie-graph-debug apps/main.cc ${CORE_SOURCE_FILES})
 target_include_directories(scale-pie-graph-debug PRIVATE include)
 
 ci_make_app(
@@ -73,3 +80,7 @@ ci_make_app(
         INCLUDES        include
         LIBRARIES       catch2
 )
+
+if(MSVC)
+    set_property(TARGET scale-pie-graph-test APPEND_STRING PROPERTY LINK_FLAGS " /SUBSYSTEM:CONSOLE")
+endif()
