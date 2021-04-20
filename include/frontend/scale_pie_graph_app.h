@@ -8,10 +8,6 @@ namespace scalepiegraph {
 
 namespace frontend {
 
-/**
- * Allows a user to draw a digit on a sketchpad and uses Naive Bayes to
- * classify it.
- */
 class ScalePieGraphApp : public ci::app::App {
  public:
   ScalePieGraphApp();

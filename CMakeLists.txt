@@ -13,10 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Let's nicely support folders in IDE's
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Add Vpkg as a submodule
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
-        CACHE STRING "Vcpkg toolchain file")
-
 # Warning flags
 if(MSVC)
     # warning level 3 and all warnings as errors
@@ -48,6 +44,20 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
+FetchContent_Declare(
+        jsoncpp
+        GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
+        GIT_TAG        1.9.4
+)
+
+# Adds jsoncpp json parsing library
+FetchContent_GetProperties(jsoncpp)
+if(NOT jsoncpp_POPULATED)
+    FetchContent_Populate(jsoncpp)
+    add_library(jsoncpp INTERFACE)
+    target_include_directories(jsoncpp INTERFACE ${jsoncpp_SOURCE_DIR}/include)
+endif()
+
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
@@ -63,8 +73,12 @@ list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
 list(APPEND TEST_FILES    tests/test_scale.cc
                           tests/test_synthesizer.cc)
 
-add_executable(scale-pie-graph-debug apps/main.cc ${CORE_SOURCE_FILES})
-target_include_directories(scale-pie-graph-debug PRIVATE include)
+ci_make_app(
+        APP_NAME        scale-pie-graph-debug
+        CINDER_PATH     ${CINDER_PATH}
+        SOURCES         apps/main.cc ${SOURCE_FILES}
+        INCLUDES        include
+)
 
 ci_make_app(
         APP_NAME        scale-pie-graph
