@@ -116,7 +116,70 @@ TEST_CASE("Scale Inequality") {
   }
 }
 
-/*TEST_CASE("Update Interval Size");
+TEST_CASE("Update Interval Size Valid") {
+  SECTION("Reduce interval size by half") {
+    Scale test_scale(12);
 
-TEST_CASE("Calculate Note Frequency");*/
+    test_scale.UpdateIntervalSize(0, 0.5);
+
+    REQUIRE(test_scale.GetInterval(0) == Approx(50));
+    for (size_t inter_idx = 1;
+         inter_idx < test_scale.GetNumIntervals();
+         ++inter_idx) {
+      REQUIRE(test_scale.GetInterval(inter_idx) == Approx(100));
+    }
+  }
+
+  SECTION("Increase interval size by half") {
+    Scale test_scale("asdf", {100, 100, 100});
+
+    test_scale.UpdateIntervalSize(0, 1.5);
+
+    REQUIRE(test_scale.GetInterval(0) == Approx(150));
+    for (size_t inter_idx = 1;
+         inter_idx < test_scale.GetNumIntervals();
+         ++inter_idx) {
+      REQUIRE(test_scale.GetInterval(inter_idx) == Approx(100));
+    }
+  }
+}
+
+TEST_CASE("Update Interval Size Invalid") {
+  SECTION("Inter index out of bounds") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.UpdateIntervalSize(13, 0.5), std::out_of_range);
+  }
+
+  SECTION("Negative percent change") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.UpdateIntervalSize(2, -0.5), std::runtime_error);
+  }
+
+  SECTION("Zero percent change") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.UpdateIntervalSize(2, 0), std::runtime_error);
+  }
+
+  SECTION("Change exceeds octave") {
+    Scale test_scale("asdf", {1});
+
+    REQUIRE_THROWS_AS(
+        test_scale.UpdateIntervalSize(0, 1201), std::out_of_range);
+  }
+
+  SECTION("Resulting scale exceeds octave") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.UpdateIntervalSize(2, 1.01), std::out_of_range);
+  }
+}
+
+// TEST_CASE("Calculate Note Frequency");
 
