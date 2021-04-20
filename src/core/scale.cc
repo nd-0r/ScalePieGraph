@@ -40,16 +40,20 @@ Scale::Scale(size_t num_divisions) {
 }
 
 void Scale::UpdateIntervalSize(size_t inter_index, float percent_change) {
-  if (percent_change < 0) {
-    throw std::out_of_range("Cannot scale interval by a negative fraction!");
+  if (inter_index > intervals_.size()) {
+    throw std::out_of_range("Scale index exceeds size of scale.");
   }
 
   float modified_inter = intervals_[inter_index] * percent_change;
-  float scale_span = 0;
+  if (modified_inter < 1) {
+    throw std::runtime_error("New interval too small!");
+  }
 
+  float scale_span = 0;
   for (size_t index = 0; index < intervals_.size(); ++index) {
     if (index == inter_index) {
       scale_span += modified_inter;
+      continue;
     }
 
     scale_span += intervals_[index];
@@ -71,7 +75,14 @@ double Scale::CalculateNoteFrequency(float base_freq, size_t note_index) const {
     throw std::out_of_range("Invalid interval index for this scale!");
   }
 
-  return base_freq * std::pow(2, (intervals_[note_index - 1] / kCentsInOctave));
+  double freq =
+      base_freq * std::pow(2, (intervals_[note_index - 1] / kCentsInOctave));
+
+  if (freq > kFrequencyMax || freq < kFrequencyMin) {
+    throw std::out_of_range("Note frequency out of range.");
+  }
+
+  return freq;
 }
 
 float Scale::GetInterval(size_t inter_index) const {

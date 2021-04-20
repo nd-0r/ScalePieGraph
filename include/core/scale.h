@@ -30,7 +30,9 @@ class Scale {
   bool operator!=(const Scale& other_scale) const;
 
  private:
-  const size_t kCentsInOctave = 1200.0;
+  const float kCentsInOctave = 1200.0;
+  const double kFrequencyMax = 20000;
+  const double kFrequencyMin = 20;
 
   std::string name_;
   std::vector<float> intervals_;
