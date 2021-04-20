@@ -11,6 +11,8 @@ class Scale {
  public:
   Scale(const std::string& name, const std::vector<float>& intervals);
 
+  Scale(size_t num_divisions);
+
   void UpdateIntervalSize(size_t inter_index, float percent_change);
 
   double CalculateNoteFrequency(float base_freq, size_t note_index) const;
@@ -28,7 +30,7 @@ class Scale {
   bool operator!=(const Scale& other_scale) const;
 
  private:
-  const float kCentsInOctave = 1200.0;
+  const size_t kCentsInOctave = 1200.0;
 
   std::string name_;
   std::vector<float> intervals_;
