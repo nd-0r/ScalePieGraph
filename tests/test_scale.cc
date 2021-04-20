@@ -77,5 +77,46 @@ TEST_CASE("Construct Chromatic Scale Invalid") {
   }
 }
 
+TEST_CASE("Scale Equality") {
+  SECTION("Scales equal single interval") {
+    Scale test_scale_one = Scale(1);
+    Scale test_scale_two = Scale(1);
 
+    REQUIRE(test_scale_one == test_scale_two);
+  }
+
+  SECTION("Scales equal multiple intervals") {
+    Scale test_scale_one = Scale(10);
+    Scale test_scale_two = Scale(10);
+
+    REQUIRE(test_scale_one == test_scale_two);
+  }
+}
+
+TEST_CASE("Scale Inequality") {
+  SECTION("Scales unequal different names") {
+    Scale test_scale_one("asdf", {10, 10, 10, 10});
+    Scale test_scale_two("hjkl", {10, 10, 10, 10});
+
+    REQUIRE(test_scale_one != test_scale_two);
+  }
+
+  SECTION("Scales unequal different number intervals") {
+    Scale test_scale_one("asdf", {10, 10, 10, 10});
+    Scale test_scale_two("asdf", {10, 10, 10, 10, 10});
+
+    REQUIRE(test_scale_one != test_scale_two);
+  }
+
+  SECTION("Scales unequal different interval sizes") {
+    Scale test_scale_one("asdf", {10, 10, 10, 10});
+    Scale test_scale_two("asdf", {10, 20, 10, 10});
+
+    REQUIRE(test_scale_one != test_scale_two);
+  }
+}
+
+/*TEST_CASE("Update Interval Size");
+
+TEST_CASE("Calculate Note Frequency");*/
 
