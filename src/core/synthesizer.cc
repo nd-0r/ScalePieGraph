@@ -22,6 +22,35 @@ Synthesizer::Synthesizer() : context_(ci::audio::Context::master()) {
   gain_->enable();
 }
 
+void Synthesizer::Play(double frequency) const {
+  if (frequency < kFrequencyMin || frequency > kFrequencyMax) {
+    throw std::range_error("Frequency out of synthesizer range.");
+  }
 
+  oscillator_->setFreq(frequency);
+
+  context_->enable();
+}
+
+void Synthesizer::Stop() const {
+  context_->disable();
+}
+
+void Synthesizer::SetWaveform(
+    cinder::audio::WaveformType waveform_type) const {
+  oscillator_->setWaveform(waveform_type);
+}
+
+void Synthesizer::SetGain(float gain) {
+  gain_->setValue(gain);
+}
+
+void Synthesizer::SetFilter(float cutoff) {
+  if (cutoff < kFrequencyMin || cutoff > kFrequencyMax) {
+    throw std::runtime_error("Cutoff out of synthesizer range.");
+  }
+
+  filter_->setCutoffFreq(cutoff);
+}
 
 }
