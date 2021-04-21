@@ -7,23 +7,53 @@
 #include <cinder/audio/Context.h>
 #include <cinder/audio/GainNode.h>
 #include <cinder/audio/FilterNode.h>
-#include <cinder/audio/InputNode.h>
-#include <cinder/audio/NodeEffects.h>
 
 namespace scalepiegraph {
 
+/**
+ * A class representing a sound synthesizer with variable waveform, gain, and
+ * filter.
+ */
 class Synthesizer {
  public:
+
+  /**
+   * Create a Synthesizer by initializing the audio context and patching the
+   * required effect and generator nodes.
+   */
   Synthesizer();
 
-  void Play(double frequency) const;
+  /**
+   * Start this Synthesizer or do nothing if Synthesizer is already started.
+   *
+   * @param frequency The frequency at which to start this Synthesizer.
+   */
+  void Start(double frequency) const;
 
+  /**
+   * Stop this Synthesizer or do nothing if Synthesizer is already stopped.
+   */
   void Stop() const;
 
+  /**
+   * Set the waveform of this Synthesizer.
+   *
+   * @param waveform_type The waveform type to which to set this Synthesizer
+   */
   void SetWaveform(cinder::audio::WaveformType waveform_type) const;
 
+  /**
+   * Set the gain of this Synthesizer.
+   *
+   * @param gain The gain at which to set this Synthesizer
+   */
   void SetGain(float gain);
 
+  /**
+   * Set the cutoff frequency of this Synthesizer's filter.
+   *
+   * @param cutoff The cutoff at which to set this Synthesizer's filter
+   */
   void SetFilter(float cutoff);
 
   // TODO - Implement
