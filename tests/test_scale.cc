@@ -183,5 +183,68 @@ TEST_CASE("Update Interval Size Invalid") {
   }
 }
 
-// TEST_CASE("Calculate Note Frequency");
+TEST_CASE("Calculate Note Frequency Valid") {
+  SECTION("12 TET Chromatic Note 0") {
+    const double kExpectedFreq = 440;
+    Scale test_scale(12);
+
+    double freq = test_scale.CalculateNoteFrequency(440, 0);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
+
+  SECTION("12 TET Chromatic Note 5") {
+    const double kExpectedFreq = 587.3296;
+    Scale test_scale(12);
+
+    double freq = test_scale.CalculateNoteFrequency(440, 5);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
+
+  SECTION("12 TET Chromatic Note 11") {
+    const double kExpectedFreq = 830.60956;
+    Scale test_scale(12);
+
+    double freq = test_scale.CalculateNoteFrequency(440, 11);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
+
+  SECTION("Just Tuned Major Note 3") {
+    const double kExpectedFreq = 528;
+    std::vector<float> just_major_intervals = {111.73, 92.18, 111.73,
+                                               70.67, 111.73, 84.47,
+                                               119.45, 111.73, 70.67,
+                                               111.73, 92.18};
+    Scale test_scale("Just Major", just_major_intervals);
+
+    double freq = test_scale.CalculateNoteFrequency(440, 3);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
+}
+
+TEST_CASE("Calculate Note Frequency Invalid") {
+  SECTION("Negative note index") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.CalculateNoteFrequency(440, -1), std::out_of_range);
+  }
+
+  SECTION("Note index too large") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.CalculateNoteFrequency(440, 12), std::out_of_range);
+  }
+
+  SECTION("Negative frequency") {
+    Scale test_scale(12);
+
+    REQUIRE_THROWS_AS(
+        test_scale.CalculateNoteFrequency(-1, 4), std::out_of_range);
+  }
+}
 
