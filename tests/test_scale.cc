@@ -47,6 +47,7 @@ TEST_CASE("Construct Chromatic Scale Valid") {
 
     REQUIRE(test_scale.GetNumIntervals() == num_divisions);
     REQUIRE(test_scale.GetName() == kExpectedName);
+
     for (size_t inter_idx = 0; inter_idx < num_divisions; ++inter_idx) {
       REQUIRE(test_scale.GetInterval(inter_idx) == Approx(kExpectedInterval));
     }
@@ -61,6 +62,7 @@ TEST_CASE("Construct Chromatic Scale Valid") {
 
     REQUIRE(test_scale.GetNumIntervals() == num_divisions);
     REQUIRE(test_scale.GetName() == kExpectedName);
+
     for (size_t inter_idx = 0; inter_idx < num_divisions; ++inter_idx) {
       REQUIRE(test_scale.GetInterval(inter_idx) == Approx(kExpectedInterval));
     }
