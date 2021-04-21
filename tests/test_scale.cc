@@ -248,3 +248,45 @@ TEST_CASE("Calculate Note Frequency Invalid") {
   }
 }
 
+TEST_CASE("Append interval to scale valid") {
+  Scale test_scale("asdf", {100, 100, 100});
+
+  test_scale.AppendInterval(100);
+
+  REQUIRE(test_scale.GetNumIntervals() == 4);
+  REQUIRE(test_scale.GetInterval(3) == 100);
+}
+
+TEST_CASE("Append interval to scale invalid") {
+  SECTION("Append interval too small") {
+    Scale test_scale("asdf", {100, 100, 100});
+
+    REQUIRE_THROWS_AS(test_scale.AppendInterval(0.99), std::runtime_error);
+    REQUIRE(test_scale.GetNumIntervals() == 3);
+  }
+
+  SECTION("Append interval exceeds octave") {
+    Scale test_scale("asdf", {100, 100, 100});
+
+    REQUIRE_THROWS_AS(test_scale.AppendInterval(901), std::out_of_range);
+    REQUIRE(test_scale.GetNumIntervals() == 3);
+  }
+}
+
+TEST_CASE("Remove interval from scale valid") {
+  Scale test_scale("asdf", {100, 100});
+
+  test_scale.RemoveInterval();
+
+  REQUIRE(test_scale.GetNumIntervals() == 1);
+  REQUIRE(test_scale.GetInterval(0) == 100);
+}
+
+TEST_CASE("Remove interval from scale invalid") {
+  SECTION("Remove interval from singleton scale") {
+    Scale test_scale("asdf", {100});
+
+    REQUIRE_THROWS_AS(test_scale.RemoveInterval(), std::out_of_range);
+    REQUIRE(test_scale.GetNumIntervals() == 1);
+  }
+}
