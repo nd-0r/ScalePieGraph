@@ -31,9 +31,6 @@ class Scale {
 
  private:
   const float kCentsInOctave = 1200.0;
-  const double kFrequencyMax = 20000;
-  const double kFrequencyMin = 20;
-
   std::string name_;
   std::vector<float> intervals_;
 
