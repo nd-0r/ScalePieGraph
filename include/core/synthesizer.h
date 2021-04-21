@@ -36,6 +36,13 @@ class Synthesizer {
   void Stop() const;
 
   /**
+   * Set the frequency of this Synthesizer.
+   *
+   * @param frequency The frequency to which to set this Synthesizer
+   */
+  void SetFrequency(double frequency) const;
+
+  /**
    * Set the waveform of this Synthesizer.
    *
    * @param waveform_type The waveform type to which to set this Synthesizer

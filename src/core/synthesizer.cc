@@ -36,6 +36,14 @@ void Synthesizer::Stop() const {
   context_->disable();
 }
 
+void Synthesizer::SetFrequency(double frequency) const {
+  if (frequency < kFrequencyMin || frequency > kFrequencyMax) {
+    throw std::range_error("Frequency out of synthesizer range.");
+  }
+
+  oscillator_->setFreq(frequency);
+}
+
 void Synthesizer::SetWaveform(
     cinder::audio::WaveformType waveform_type) const {
   oscillator_->setWaveform(waveform_type);
