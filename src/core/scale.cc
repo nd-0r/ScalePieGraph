@@ -111,10 +111,6 @@ size_t Scale::GetNumIntervals() const {
   return intervals_.size();
 }
 
-size_t Scale::GetNumNotes() const {
-  return intervals_.size() + 1;
-}
-
 const std::string& Scale::GetName() const {
   return name_;
 }

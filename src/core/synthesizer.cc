@@ -9,7 +9,7 @@ Synthesizer::Synthesizer() : context_(ci::audio::Context::master()) {
   }
 
   oscillator_ = context_->makeNode(
-      new ci::audio::GenOscNode(ci::audio::WaveformType::SINE, frequency_));
+      new ci::audio::GenOscNode(ci::audio::WaveformType::SINE));
   filter_ = context_->makeNode(new ci::audio::FilterLowPassNode);
   gain_ = context_->makeNode(new ci::audio::GainNode);
 
@@ -22,7 +22,7 @@ Synthesizer::Synthesizer() : context_(ci::audio::Context::master()) {
   gain_->enable();
 }
 
-void Synthesizer::Play(double frequency) const {
+void Synthesizer::Start(double frequency) const {
   if (frequency < kFrequencyMin || frequency > kFrequencyMax) {
     throw std::range_error("Frequency out of synthesizer range.");
   }

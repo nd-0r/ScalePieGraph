@@ -66,7 +66,6 @@ class Synthesizer {
   ci::audio::GenOscNodeRef oscillator_;
   ci::audio::FilterLowPassNodeRef filter_;
   ci::audio::GainNodeRef gain_;
-  float frequency_ = 440;
 };
 
 }
