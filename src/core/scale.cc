@@ -4,7 +4,7 @@
 namespace scalepiegraph {
 
 Scale::Scale(const std::string& name, const std::vector<float>& intervals) :
-    name_(name) {
+    name_(name), intervals_(std::vector<float>(intervals.size())) {
   if (intervals.size() == 0) {
     throw std::out_of_range("Scale must have at least one interval!");
   }
@@ -13,16 +13,16 @@ Scale::Scale(const std::string& name, const std::vector<float>& intervals) :
     throw std::out_of_range("Intervals must be wider than one cent.");
   }
 
-  float span = 0;
-  for (float inter : intervals) {
-    span += inter;
+  float current_span = 0;
+  for (size_t inter_index = 0; inter_index < intervals.size(); ++inter_index) {
+    current_span += intervals[inter_index];
 
-    if (span > kCentsInOctave || inter < 1) {
+    if (current_span > kCentsInOctave || intervals[inter_index] < 1) {
       throw std::out_of_range("Invalid intervals.");
     }
-  }
 
-  intervals_ = intervals;
+    intervals_[inter_index] = current_span;
+  }
 }
 
 Scale::Scale(size_t num_divisions) {
@@ -35,8 +35,15 @@ Scale::Scale(size_t num_divisions) {
   }
 
   name_ = "Chromatic Scale " + std::to_string(num_divisions) + " TET";
-  intervals_ =
-      std::vector<float>(num_divisions, kCentsInOctave / num_divisions);
+  intervals_ = std::vector<float>(num_divisions);
+
+  float inter_size = kCentsInOctave / num_divisions;
+  float current_span = 0;
+  for (size_t inter_index = 0; inter_index < num_divisions; ++inter_index) {
+    current_span += inter_size;
+
+    intervals_[inter_index] = current_span;
+  }
 }
 
 void Scale::UpdateIntervalSize(size_t inter_index, float percent_change) {
@@ -44,43 +51,46 @@ void Scale::UpdateIntervalSize(size_t inter_index, float percent_change) {
     throw std::out_of_range("Scale index exceeds size of scale.");
   }
 
-  float modified_inter = intervals_[inter_index] * percent_change;
-  if (modified_inter < 1) {
+  float change;
+  float interval;
+  if (inter_index == 0) {
+    interval = intervals_[0];
+    change = percent_change * interval - interval;
+  } else {
+    interval = intervals_[inter_index] - intervals_[inter_index - 1];
+    change = percent_change * interval - interval;
+  }
+
+  if (interval + change < 1) {
     throw std::runtime_error("New interval too small!");
   }
 
-  float scale_span = 0;
-  for (size_t index = 0; index < intervals_.size(); ++index) {
-    if (index == inter_index) {
-      scale_span += modified_inter;
-      continue;
+  for (size_t index = inter_index; index < intervals_.size(); ++index) {
+    float modified_inter = intervals_[index] + change;
+
+    if (modified_inter > kCentsInOctave) {
+      throw std::out_of_range("Scale exceeds octave!");
     }
 
-    scale_span += intervals_[index];
+    intervals_[index] = modified_inter;
   }
-
-  if (scale_span > kCentsInOctave) {
-    throw std::out_of_range("Scale exceeds octave!");
-  }
-
-  intervals_[inter_index] = modified_inter;
 }
 
 double Scale::CalculateNoteFrequency(float base_freq, size_t note_index) const {
+  if (base_freq < 0) {
+    throw std::out_of_range("Base frequency must be a positive real number");
+  }
+
   if (note_index == 0) {
     return base_freq;
   }
 
-  if (note_index - 1 > intervals_.size()) {
+  if (note_index > intervals_.size() - 1) {
     throw std::out_of_range("Invalid interval index for this scale!");
   }
 
   double freq =
       base_freq * std::pow(2, (intervals_[note_index - 1] / kCentsInOctave));
-
-  if (freq > kFrequencyMax || freq < kFrequencyMin) {
-    throw std::out_of_range("Note frequency out of range.");
-  }
 
   return freq;
 }
@@ -90,7 +100,11 @@ float Scale::GetInterval(size_t inter_index) const {
     throw std::out_of_range("Invalid interval index for this scale!");
   }
 
-  return intervals_[inter_index];
+  if (inter_index == 0) {
+    return intervals_[inter_index];
+  }
+
+  return intervals_[inter_index] - intervals_[inter_index - 1];
 }
 
 size_t Scale::GetNumIntervals() const {
