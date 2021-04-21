@@ -70,8 +70,7 @@ list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/frontend/canvas.cc
                             src/frontend/scale_pie_graph_app.cc)
 
-list(APPEND TEST_FILES    tests/test_scale.cc
-                          tests/test_synthesizer.cc)
+list(APPEND TEST_FILES    tests/test_scale.cc)
 
 ci_make_app(
         APP_NAME        scale-pie-graph-debug

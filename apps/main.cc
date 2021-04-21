@@ -1,5 +1,6 @@
 #include <core/synthesizer.h>
 #include <unistd.h>
+#include <jsoncpp/json.h>
 
 int main() {
   scalepiegraph::Synthesizer synthesizer;

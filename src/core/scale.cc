@@ -76,6 +76,26 @@ void Scale::UpdateIntervalSize(size_t inter_index, float percent_change) {
   }
 }
 
+void Scale::AppendInterval(float inter_size) {
+  if (inter_size < 1) {
+    throw std::runtime_error("New interval too small!");
+  }
+
+  if (intervals_.back() + inter_size > kCentsInOctave) {
+    throw std::out_of_range("Scale exceeds octave!");
+  }
+
+  intervals_.push_back(intervals_.back() + inter_size);
+}
+
+void Scale::RemoveInterval() {
+  if (intervals_.size() == 1) {
+    throw std::out_of_range("Cannot remove interval from singleton scale");
+  }
+
+  intervals_.pop_back();
+}
+
 double Scale::CalculateNoteFrequency(float base_freq, size_t note_index) const {
   if (base_freq < 0) {
     throw std::out_of_range("Base frequency must be a positive real number");

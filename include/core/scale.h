@@ -40,6 +40,18 @@ class Scale {
   void UpdateIntervalSize(size_t inter_index, float percent_change);
 
   /**
+   * Append an interval to this scale with the specified size.
+   *
+   * @param inter_size The size of the interval to add to this scale.
+   */
+  void AppendInterval(float inter_size);
+
+  /**
+   * Remove interval from the end of this scale.
+   */
+  void RemoveInterval();
+
+  /**
    * Calculate the frequency of the specified note based on the given base
    * frequency.
    *
