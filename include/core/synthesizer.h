@@ -47,7 +47,7 @@ class Synthesizer {
    *
    * @param waveform_type The waveform type to which to set this Synthesizer
    */
-  void SetWaveform(cinder::audio::WaveformType waveform_type) const;
+  void SetWaveform(ci::audio::WaveformType waveform_type) const;
 
   /**
    * Set the gain of this Synthesizer.
