@@ -28,7 +28,6 @@ void showcase_synthesizer() {
 }
 
 void showcase_json_library(std::ifstream& json_file) {
-
   Json::Value root;
   json_file >> root;
 

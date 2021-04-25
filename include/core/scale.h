@@ -9,19 +9,24 @@ namespace scalepiegraph {
 
 /**
  * A class representing a musical one-octave scale. Scales are stored as
- * arrays of pairwise interval sizes in cents. Furthermore, intervals
+ * arrays of cumulative interval sizes in cents. Furthermore, intervals
  * can be added, removed, or changed in size. Notes in the scale can be
  * converted to acoustic frequencies.
  */
 class Scale {
  public:
   /**
-   * Create a scale with the specified name and intervals.
+   * Create a scale with the specified name and intervals. Scales are
+   * constructed by pairwise intervals, not cumulative intervals.
    *
    * @param name The name of this Scale
    * @param intervals The intervals in this Scale
+   * @param description The description of this Scale, empty by default
    */
-  Scale(const std::string& name, const std::vector<float>& intervals);
+  Scale(const std::string& name,
+        const std::vector<float>& intervals,
+        const std::string& description = "",
+        size_t num_octaves = 1);
 
   /**
    * Create a scale with a specified number of equal-sized intervals.
@@ -86,6 +91,13 @@ class Scale {
   const std::string& GetName() const;
 
   /**
+   * Get the description of this Scale.
+   *
+   * @return The description of this Scale
+   */
+  const std::string& GetDescription() const;
+
+  /**
    * Determine if this Scale is equal to another scale. Two Scales are equal
    * if they have the same name and intervals.
    *
@@ -103,11 +115,33 @@ class Scale {
    */
   bool operator!=(const Scale& other_scale) const;
 
+  inline static const float kCentsInOctave = 1200.0;
+
+  /**
+   * Convert pitches, recorded as diatonic intervals, to log-scale cents.
+   *
+   * @param diatonic_intervals The diatonic intervals to convert to intervals
+   * of cents
+   * @return The cents interval representation of the diatonic intervals
+   */
+  static std::vector<float> ConvertDiatonicIntervalsToCents(
+      const std::vector<size_t>& diatonic_intervals);
+
+  /**
+   * Convert pitches, recorded as frequencies in cycles per second (hertz), to
+   * log-scale cents.
+   *
+   * @param frequencies The frequencies to convert to intervals of cents
+   * @return The cents interval representation of the frequencies
+   */
+  static std::vector<float> ConvertFrequenciesToCents(
+      const std::vector<float>& frequencies);
  private:
-  const float kCentsInOctave = 1200.0;
   std::string name_;
+  std::string description_;
   std::vector<float> intervals_;
+  size_t num_octaves_ = 1;
 
 };
 
-}
+} // namespace scalepiegraph
