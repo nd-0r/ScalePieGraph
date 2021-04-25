@@ -8,16 +8,46 @@
 
 namespace scalepiegraph {
 
+/**
+ * A class representing a dataset of musical Scales.
+ */
 class ScaleDataset {
  public:
+  /**
+   * Default constructor for a Scale Dataset.
+   */
   ScaleDataset() = default;
 
+  /**
+   * Get the names of the scales in this dataset.
+   *
+   * @return The names of the scales in this dataset
+   */
   const std::vector<std::string>& GetNames() const;
 
+  /**
+   * Get the Scale corresponding to a specific name in this dataset.
+   *
+   * @param name The name of the Scale to return
+   * @return The Scale with the specified name
+   */
   Scale& operator[](const std::string& name);
 
+  /**
+   * Get the Scale corresponding to a specific name in this dataset.
+   *
+   * @param name The name of the Scale to return
+   * @return The Scale with the specified name
+   */
   const Scale& operator[](const std::string& name) const;
 
+  /**
+   * Load a JSON dataset of scales into this dataset
+   *
+   * @param input_stream The stream from which to read the JSON
+   * @param dataset The dataset in which to load the parsed Scales
+   * @return The consumed input stream
+   */
   friend std::istream& operator>>(
       std::istream& input_stream, ScaleDataset& dataset);
  private:
