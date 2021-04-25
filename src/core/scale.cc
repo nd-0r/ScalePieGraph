@@ -3,13 +3,19 @@
 
 namespace scalepiegraph {
 
-Scale::Scale(const std::string& name, const std::vector<float>& intervals) :
-    name_(name), intervals_(std::vector<float>(intervals.size())) {
+Scale::Scale(const std::string& name,
+             const std::vector<float>& intervals,
+             const std::string& description,
+             size_t num_octaves) :
+    name_(name),
+    description_(description),
+    intervals_(std::vector<float>(intervals.size())),
+    num_octaves_(num_octaves) {
   if (intervals.size() == 0) {
     throw std::out_of_range("Scale must have at least one interval!");
   }
 
-  if (intervals.size() > kCentsInOctave) {
+  if (intervals.size() > num_octaves_ * kCentsInOctave) {
     throw std::out_of_range("Intervals must be wider than one cent.");
   }
 
@@ -17,7 +23,8 @@ Scale::Scale(const std::string& name, const std::vector<float>& intervals) :
   for (size_t inter_index = 0; inter_index < intervals.size(); ++inter_index) {
     current_span += intervals[inter_index];
 
-    if (current_span > kCentsInOctave || intervals[inter_index] < 1) {
+    if (current_span > num_octaves_ * kCentsInOctave ||
+        intervals[inter_index] < 1) {
       throw std::out_of_range("Invalid intervals.");
     }
 
@@ -30,7 +37,7 @@ Scale::Scale(size_t num_divisions) {
     throw std::out_of_range("Scale must have at least one interval!");
   }
 
-  if (num_divisions > kCentsInOctave) {
+  if (num_divisions > num_octaves_ * kCentsInOctave) {
     throw std::out_of_range("Intervals must be wider than one cent.");
   }
 
@@ -68,7 +75,7 @@ void Scale::UpdateIntervalSize(size_t inter_index, float percent_change) {
   for (size_t index = inter_index; index < intervals_.size(); ++index) {
     float modified_inter = intervals_[index] + change;
 
-    if (modified_inter > kCentsInOctave) {
+    if (modified_inter > num_octaves_ * kCentsInOctave) {
       throw std::out_of_range("Scale exceeds octave!");
     }
 
@@ -81,7 +88,7 @@ void Scale::AppendInterval(float inter_size) {
     throw std::runtime_error("New interval too small!");
   }
 
-  if (intervals_.back() + inter_size > kCentsInOctave) {
+  if (intervals_.back() + inter_size > num_octaves_ * kCentsInOctave) {
     throw std::out_of_range("Scale exceeds octave!");
   }
 
@@ -135,7 +142,9 @@ const std::string& Scale::GetName() const {
   return name_;
 }
 
-// TODO - implement instream and ostream operator overloads
+const std::string& Scale::GetDescription() const {
+  return description_;
+}
 
 bool Scale::operator==(const Scale &other_scale) const {
   if (name_ != other_scale.name_ ||
@@ -148,6 +157,54 @@ bool Scale::operator==(const Scale &other_scale) const {
 
 bool Scale::operator!=(const Scale &other_scale) const {
   return !operator==(other_scale);
+}
+
+std::vector<float> Scale::ConvertDiatonicIntervalsToCents(
+    const std::vector<size_t> &diatonic_intervals) {
+  if (diatonic_intervals.size() < 2) {
+    throw std::out_of_range(
+        "Provided diatonic intervals have less than one interval");
+  }
+
+  std::vector<float> cents_intervals;
+
+  float last_interval = 0;
+  for (size_t interval_idx = 1;
+       interval_idx < diatonic_intervals.size();
+       ++interval_idx) {
+    size_t current_interval = diatonic_intervals[interval_idx];
+    if (current_interval < 0 || current_interval > 11) {
+      throw std::out_of_range("Provided diatonic intervals out of range");
+    }
+
+    // 100 cents in a semitone
+    float interval_cents = 100 * current_interval;
+    cents_intervals.push_back(interval_cents - last_interval);
+    last_interval = interval_cents;
+  }
+
+  return cents_intervals;
+}
+
+std::vector<float> Scale::ConvertFrequenciesToCents(
+    const std::vector<float> &frequencies) {
+  if (frequencies.size() < 2) {
+    throw std::out_of_range("Provided frequencies have less than one interval");
+  }
+
+  std::vector<float> cents_intervals;
+
+  float last_interval = 0;
+  for (size_t freq_idx = 1;
+       freq_idx < frequencies.size();
+       ++freq_idx) {
+    float cents_interval =
+        kCentsInOctave * std::log2(frequencies[freq_idx] / frequencies[0]);
+    cents_intervals.push_back(cents_interval - last_interval);
+    last_interval = cents_interval;
+  }
+
+  return cents_intervals;
 }
 
 
