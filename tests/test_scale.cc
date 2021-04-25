@@ -290,3 +290,62 @@ TEST_CASE("Remove interval from scale invalid") {
     REQUIRE(test_scale.GetNumIntervals() == 1);
   }
 }
+
+TEST_CASE("Convert diatonic intervals to cents valid") {
+  SECTION("One-note scale") {
+    const std::vector<size_t> kIntervals = {0, 3};
+    const std::vector<float> kExpected = {300};
+
+    REQUIRE(Scale::ConvertDiatonicIntervalsToCents(kIntervals) == kExpected);
+  }
+
+  SECTION("Multi-note scale") {
+    const std::vector<size_t> kIntervals = {0, 3, 5, 6, 7, 10};
+    const std::vector<float> kExpected = {300, 200, 100, 100, 300};
+
+    std::vector<float> out = Scale::ConvertDiatonicIntervalsToCents(kIntervals);
+    REQUIRE(out == kExpected);
+  }
+}
+
+TEST_CASE("Convert frequencies to cents valid") {
+  SECTION("One-note scale") {
+    const std::vector<float> kIntervals = {261.6255653006,
+                                           315.83481057014};
+    const std::vector<float> kExpected = {325.9999999999928};
+
+    std::vector<float> outs = Scale::ConvertFrequenciesToCents(kIntervals);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+
+  SECTION("Multi-note scale") {
+    const std::vector<float> kIntervals = {261.6255653006,
+                                           315.83481057014,
+                                           401.62159853282,
+                                           478.71605466184,
+                                           581.25458464818,
+                                           714.36935367713,
+                                           884.07587347381,
+                                           1042.8816384286};
+    const std::vector<float> kExpected = {325.9999999999928,
+                                          416.00000000000256,
+                                          304.00000000001717,
+                                          335.99999999998295,
+                                          356.9999999999998,
+                                          369.00000000000114,
+                                          286.0000000000073};
+
+    std::vector<float> outs = Scale::ConvertFrequenciesToCents(kIntervals);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+}
