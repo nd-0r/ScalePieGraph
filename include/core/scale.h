@@ -84,6 +84,13 @@ class Scale {
   size_t GetNumIntervals() const;
 
   /**
+   * Get the cumulative intervals in this Scale as proportions between 0 and 1.
+   *
+   * @return The proportions in this Scale
+   */
+  std::vector<float> GetProportions() const;
+
+  /**
    * Get the name of this Scale.
    *
    * @return The name of this Scale

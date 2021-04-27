@@ -138,6 +138,16 @@ size_t Scale::GetNumIntervals() const {
   return intervals_.size();
 }
 
+std::vector<float> Scale::GetProportions() const {
+  std::vector<float> proportions(intervals_.size());
+
+  for (float interval : intervals_) {
+    proportions.emplace_back(interval / (kCentsInOctave * num_octaves_));
+  }
+
+  return proportions;
+}
+
 const std::string& Scale::GetName() const {
   return name_;
 }

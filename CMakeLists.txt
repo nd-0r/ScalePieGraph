@@ -64,12 +64,15 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND CORE_SOURCE_FILES src/core/scale.cc
-                              src/core/synthesizer.cc)
+                              src/core/synthesizer.cc
+                              src/core/scale_dataset.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/frontend/canvas.cc
                             src/frontend/scale_pie_graph_app.cc
-                            src/core/scale_dataset.cc)
+                            src/frontend/keyboard.cc
+                            src/frontend/pie_graph.cc
+                            src/frontend/controls/knob.cc)
 
 list(APPEND TEST_FILES    tests/test_scale.cc
                           tests/test_scale_dataset.cc)
