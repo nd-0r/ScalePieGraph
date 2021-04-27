@@ -3,6 +3,8 @@
 
 namespace scalepiegraph {
 
+const float Scale::kCentsInOctave = 1200.0;
+
 Scale::Scale(const std::string& name,
              const std::vector<float>& intervals,
              const std::string& description,
@@ -139,10 +141,10 @@ size_t Scale::GetNumIntervals() const {
 }
 
 std::vector<float> Scale::GetProportions() const {
-  std::vector<float> proportions(intervals_.size());
+  std::vector<float> proportions;
 
   for (float interval : intervals_) {
-    proportions.emplace_back(interval / (kCentsInOctave * num_octaves_));
+    proportions.push_back(interval / (kCentsInOctave * num_octaves_));
   }
 
   return proportions;

@@ -122,7 +122,7 @@ class Scale {
    */
   bool operator!=(const Scale& other_scale) const;
 
-  inline static const float kCentsInOctave = 1200.0;
+  static const float kCentsInOctave;
 
   /**
    * Convert pitches, recorded as diatonic intervals, to log-scale cents.
