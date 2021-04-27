@@ -1,12 +1,12 @@
-/*
-#include <visualizer/naive_bayes_app.h>
 
-using naivebayes::visualizer::NaiveBayesApp;
+#include <frontend/scale_pie_graph_app.h>
 
-void prepareSettings(NaiveBayesApp::Settings* settings) {
+using scalepiegraph::frontend::ScalePieGraphApp;
+
+void prepareSettings(ScalePieGraphApp::Settings* settings) {
   settings->setResizable(false);
 }
 
 // This line is a macro that expands into an "int main()" function.
-CINDER_APP(NaiveBayesApp, ci::app::RendererGl, prepareSettings);
-*/
+CINDER_APP(ScalePieGraphApp, ci::app::RendererGl, prepareSettings)
+
