@@ -1,8 +1,12 @@
-//
-// Created by Andrew Orals on 4/26/21.
-//
+// Copyright (c) 2021 Andrew Orals. All rights reserved.
+#pragma once
 
-#ifndef SCALE_PIE_GRAPH_KEYBOARD_H
-#define SCALE_PIE_GRAPH_KEYBOARD_H
+namespace scalepiegraph {
 
-#endif //SCALE_PIE_GRAPH_KEYBOARD_H
+namespace frontend {
+
+
+
+}
+
+}
