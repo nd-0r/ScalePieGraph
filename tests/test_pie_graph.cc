@@ -61,12 +61,12 @@ TEST_CASE("Test get handle index") {
 TEST_CASE("Test update handle") {
   SECTION("Widen interval horizontal handle") {
     const size_t kHandleIndex = 2;
-    const glm::vec2 kMousePos(100, 100);
+    glm::vec2 mouse_pos(100, 100);
     const std::vector<float> kExpected = {0.25, 0.5, 0.875, 0.925};
 
     PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 0.8});
 
-    bool did_succeed = graph.UpdateHandle(kHandleIndex, kMousePos);
+    bool did_succeed = graph.UpdateHandle(kHandleIndex, mouse_pos);
 
     auto out = graph.GetProportions();
 
@@ -79,12 +79,12 @@ TEST_CASE("Test update handle") {
 
   SECTION("Widen interval vertical handle") {
     const size_t kHandleIndex = 1;
-    const glm::vec2 kMousePos(100, -100);
+    glm::vec2 mouse_pos(100, -100);
     const std::vector<float> kExpected = {0.25, 0.625, 0.875, 0.925};
 
     PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 0.8});
 
-    bool did_succeed = graph.UpdateHandle(kHandleIndex, kMousePos);
+    bool did_succeed = graph.UpdateHandle(kHandleIndex, mouse_pos);
 
     auto out = graph.GetProportions();
 
@@ -97,12 +97,12 @@ TEST_CASE("Test update handle") {
 
   SECTION("Shorten interval horizontal handle") {
     const size_t kHandleIndex = 2;
-    const glm::vec2 kMousePos(100, -100);
+    glm::vec2 mouse_pos(100, -100);
     const std::vector<float> kExpected = {0.25, 0.5, 0.625, 0.875};
 
     PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 1});
 
-    bool did_succeed = graph.UpdateHandle(kHandleIndex, kMousePos);
+    bool did_succeed = graph.UpdateHandle(kHandleIndex, mouse_pos);
 
     auto out = graph.GetProportions();
 
@@ -115,12 +115,12 @@ TEST_CASE("Test update handle") {
 
   SECTION("Shorten interval vertical handle") {
     const size_t kHandleIndex = 1;
-    const glm::vec2 kMousePos(-100, -100);
+    glm::vec2 mouse_pos(-100, -100);
     const std::vector<float> kExpected = {0.25, 0.375, 0.625, 0.675};
 
     PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 0.8});
 
-    bool did_succeed = graph.UpdateHandle(kHandleIndex, kMousePos);
+    bool did_succeed = graph.UpdateHandle(kHandleIndex, mouse_pos);
 
     auto out = graph.GetProportions();
 

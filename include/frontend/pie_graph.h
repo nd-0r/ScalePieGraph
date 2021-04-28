@@ -57,7 +57,7 @@ class PieGraph {
    * @param mouse_pos The position used to calculate the new angle
    * @return True if the update was successful; otherwise, false
    */
-  bool UpdateHandle(size_t handle_index, const glm::vec2& mouse_pos);
+  bool UpdateHandle(size_t handle_index, glm::vec2 mouse_pos);
 
   /**
    * Get the current proportions of this Pie Graph.
