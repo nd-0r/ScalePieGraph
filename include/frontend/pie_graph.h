@@ -21,9 +21,9 @@ class PieGraph {
 
   void Draw();
 
-  size_t GetNearestHandleIndex(const glm::vec2& pos) const;
+  int GetHandleIndex(const glm::vec2& pos) const;
 
-  void UpdateHandle(size_t handle_index, glm::vec2& new_pos);
+  bool UpdateHandle(size_t handle_index, const glm::vec2& new_pos);
 
   std::vector<float> GetProportions() const;
 
@@ -32,10 +32,15 @@ class PieGraph {
   static const float kHandleRadius;
   static const ci::Color kStrokeColor;
 
+  glm::vec2 CalcClosestPointOnArc(const glm::vec2& point) const;
+  void CreateHandles(bool should_draw=true);
+
+  ci::Path2d current_arc_;
+  std::vector<ci::Path2d> current_handles_;
+
   glm::vec2 center_;
   float radius_;
-  std::vector<float> proportions_;
-  std::vector<glm::vec2> handles_;
+  std::vector<float> division_radians_;
 };
 
 }
