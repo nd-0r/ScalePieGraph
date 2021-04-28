@@ -55,9 +55,9 @@ int PieGraph::GetHandleIndex(const glm::vec2& pos) const {
   return -1; // Position is not inside a handle
 }
 
-bool PieGraph::UpdateHandle(size_t handle_index, const glm::vec2& new_pos) {
+bool PieGraph::UpdateHandle(size_t handle_index, const glm::vec2& mouse_pos) {
   float curr_angle = division_radians_[handle_index];
-  glm::vec2 mouse_vec = new_pos - center_;
+  glm::vec2 mouse_vec = mouse_pos - center_;
   glm::vec2 rad_vec(0, radius_);
   glm::vec2 rad_vec_left_normal(-radius_, 0);
 
