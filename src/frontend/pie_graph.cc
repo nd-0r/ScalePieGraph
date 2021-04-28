@@ -41,7 +41,48 @@ void PieGraph::Draw() {
   CreateHandles(true);
 }
 
+int PieGraph::GetHandleIndex(const glm::vec2& pos) const {
+  int handle_idx = 0;
 
+  for (const ci::Path2d& handle : current_handles_) {
+    if (handle.contains(pos)) {
+      return handle_idx;
+    }
+
+    ++handle_idx;
+  }
+
+  return -1; // Position is not inside a handle
+}
+
+std::vector<float> PieGraph::GetProportions() const {
+  std::vector<float> proportions;
+
+  for (float radian : division_radians_) {
+    // Convert to normalized proportions
+    proportions.push_back(radian / (2 * glm::pi<float>()));
+  }
+
+  return proportions;
+}
+
+// TODO - remove
+glm::vec2 PieGraph::CalcClosestPointOnArc(const glm::vec2& point) const {
+  std::vector<glm::vec2> points = current_arc_.subdivide();
+
+  float min_dist = std::numeric_limits<float>::max();
+  glm::vec2 closest_point;
+
+  for (const glm::vec2& arc_point : points) {
+    float dist = glm::distance(arc_point, point);
+    if (dist < min_dist) {
+      closest_point = arc_point;
+      min_dist = dist;
+    }
+  }
+
+  return closest_point;
+}
 
 void PieGraph::CreateHandles(bool should_draw) {
   current_handles_ = std::vector<ci::Path2d>();
