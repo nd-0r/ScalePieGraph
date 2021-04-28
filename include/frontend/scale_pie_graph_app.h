@@ -17,10 +17,14 @@ class ScalePieGraphApp : public ci::app::App {
 
   void draw() override;
 
-//  void mouseDown(ci::app::MouseEvent event) override;
-//  // Store previous pie graph so that it can be reverted if not a valid scale
-//
-//  void mouseDrag(ci::app::MouseEvent event) override;
+  void mouseDown(ci::app::MouseEvent event) override;
+
+  void mouseUp(ci::app::MouseEvent event) override;
+
+  // TODO
+  // Store previous pie graph so that it can be reverted if not a valid scale
+
+  // void mouseDrag(ci::app::MouseEvent event) override;
 //
 //  void keyDown(ci::app::KeyEvent event) override;
 //
@@ -30,16 +34,19 @@ class ScalePieGraphApp : public ci::app::App {
   const double kDefaultMargin = 20;
 
  private:
-  // const float kGoldMean = 1.6180339887; // ratio of window to pie graph center
-  // bool is_ready_ = false; // App is not ready until the dataset is loaded
+  // TODO bool is_ready_ = false; // App is not ready until the dataset is loaded
+  const ci::Color kBackgroundColor = ci::Color("black");
   double current_width_;
   double current_height_;
+  std::string title_;
+  std::string info_;
+  glm::vec2 last_mouse_down_pos;
+
   ScaleDataset scale_dataset_;
   Scale current_scale_;
+
   PieGraph graph_;
   Keyboard keyboard_;
-
-  const ci::Color kBackgroundColor = ci::Color("black");
 };
 
 }  // namespace frontend
