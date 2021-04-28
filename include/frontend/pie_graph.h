@@ -71,8 +71,6 @@ class PieGraph {
   static const float kHandleRadius;
   static const ci::Color kStrokeColor;
 
-  glm::vec2 CalcClosestPointOnArc(const glm::vec2& point) const;
-
   /**
    * Create the handles for this Pie Graph and optionally draw them.
    *
