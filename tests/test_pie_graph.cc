@@ -18,3 +18,43 @@ TEST_CASE("Construct pie graph from proportions") {
   }
 }
 
+TEST_CASE("Test get handle index") {
+  SECTION("Get handle index inside bounds zero") {
+    const size_t kExpectedIndex = 0;
+    // Default handle radius 5
+    const glm::vec2 kTestPosition(-100, 0);
+    PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 1});
+
+    graph.GetHandleIndex(kTestPosition);
+
+    REQUIRE(graph.GetHandleIndex(kTestPosition) == kExpectedIndex);
+  }
+
+  SECTION("Get handle index inside bounds nonzero") {
+    const size_t kExpectedIndex = 2;
+    // Default handle radius 5
+    const glm::vec2 kTestPosition(100, 0);
+    PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 1});
+
+    REQUIRE(graph.GetHandleIndex(kTestPosition) == kExpectedIndex);
+  }
+
+  SECTION("Get handle index out of bounds inside pie") {
+    const size_t kExpectedIndex = -1;
+    // Default handle radius 5
+    const glm::vec2 kTestPosition(94, 0);
+    PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 1});
+
+    REQUIRE(graph.GetHandleIndex(kTestPosition) == kExpectedIndex);
+  }
+
+  SECTION("Get handle out of bounds outside pie") {
+    const size_t kExpectedIndex = -1;
+    // Default handle radius 5
+    const glm::vec2 kTestPosition(106, 0);
+    PieGraph graph(glm::vec2(0, 0), 100, {0.25, 0.5, 0.75, 1});
+
+    REQUIRE(graph.GetHandleIndex(kTestPosition) == kExpectedIndex);
+  }
+}
+
