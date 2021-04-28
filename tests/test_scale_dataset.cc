@@ -6,7 +6,8 @@
 using scalepiegraph::ScaleDataset;
 using scalepiegraph::Scale;
 
-const std::string kDataDir = "/Users/andreworals/Documents/Dev/cinder_0.9.2_mac/my-projects/scale-pie-graph/data/";
+const std::string kDataDir = "/Users/andreworals/Documents/Dev/cinder_0.9.2_mac"
+                             "/my-projects/scale-pie-graph/data/";
 
 TEST_CASE("Import Dataset Valid") {
   std::ifstream file;
