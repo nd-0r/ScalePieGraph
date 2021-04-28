@@ -55,6 +55,41 @@ int PieGraph::GetHandleIndex(const glm::vec2& pos) const {
   return -1; // Position is not inside a handle
 }
 
+bool PieGraph::UpdateHandle(size_t handle_index, const glm::vec2& new_pos) {
+  float curr_angle = division_radians_[handle_index];
+  glm::vec2 mouse_vec = new_pos - center_;
+  glm::vec2 rad_vec(0, radius_);
+  glm::vec2 rad_vec_left_normal(-radius_, 0);
+
+  float new_handle_angle = glm::acos(glm::dot(rad_vec, mouse_vec) /
+      (glm::length(mouse_vec) * glm::length(rad_vec)));
+
+  if (glm::dot(mouse_vec, rad_vec_left_normal) < 0) {
+    new_handle_angle = 2 * glm::pi<float>() - new_handle_angle;
+  }
+
+  if ((handle_index == 0 && new_handle_angle < 0) ||
+      new_handle_angle <= division_radians_[handle_index - 1]) {
+    return false; // Cannot make section less than 0 radians wide
+  }
+
+  float diff = new_handle_angle - curr_angle;
+
+  if ((handle_index == division_radians_.size() - 1 &&
+       new_handle_angle > 2 * glm::pi<float>()) ||
+      division_radians_.back() + diff > 2 * glm::pi<float>()) {
+    return false; // New size causes pie graph to exceed 2 Pi radians
+  }
+
+  for (size_t current_handle_idx = handle_index;
+       current_handle_idx < division_radians_.size();
+       ++current_handle_idx) {
+    division_radians_[current_handle_idx] += diff;
+  }
+
+  return true; // Portion successfully resized
+}
+
 std::vector<float> PieGraph::GetProportions() const {
   std::vector<float> proportions;
 
