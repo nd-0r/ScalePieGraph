@@ -106,10 +106,20 @@ void PieGraph::CreateHandles(bool should_draw) {
 
   glm::vec2 rad_vec = glm::vec2(0, -radius_);
 
+  size_t current_idx = 0;
   for (float sweep : division_radians_) {
     float new_x = glm::cos(sweep) * rad_vec.x + glm::sin(sweep) * rad_vec.y;
     float new_y = -glm::sin(sweep) * rad_vec.x + glm::cos(sweep) * rad_vec.y;
     glm::vec2 handle_point = glm::vec2(new_x + center_.x, new_y + center_.y);
+
+    // If handles overlap
+    if (current_idx > 0 &&
+         current_handles_[current_idx - 1].contains(handle_point)) {
+      float x_buffer = 4 * glm::cos(sweep + kCircleStartOffset) * kHandleRadius;
+      float y_buffer = 4 * glm::sin(sweep + kCircleStartOffset) * kHandleRadius;
+      handle_point =
+          glm::vec2(handle_point.x - x_buffer, handle_point.y + y_buffer);
+    }
 
     ci::Path2d handle;
     handle.arc(handle_point, kHandleRadius, 0, 2 * glm::pi<float>());
@@ -121,6 +131,8 @@ void PieGraph::CreateHandles(bool should_draw) {
       ci::gl::drawLine(center_, handle_point);
       ci::gl::drawSolid(handle);
     }
+
+    ++current_idx;
   }
 }
 
