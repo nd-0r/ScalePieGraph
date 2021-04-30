@@ -59,6 +59,20 @@ class PieGraph {
   bool UpdateHandle(size_t handle_index, glm::vec2 mouse_pos);
 
   /**
+   * Get the position of this Pie Graph.
+   *
+   * @return The position of this Pie Graph
+   */
+  glm::vec2 GetCenter() const;
+
+  /**
+   * Get the radius of this Pie Graph.
+   *
+   * @return The radius of this Pie Graph
+   */
+  float GetRadius() const;
+
+  /**
    * Get the current proportions of this Pie Graph.
    *
    * @return The proportions of this Pie Graph.

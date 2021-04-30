@@ -90,6 +90,14 @@ bool PieGraph::UpdateHandle(size_t handle_index, glm::vec2 mouse_pos) {
   return true; // Portion successfully resized
 }
 
+glm::vec2 PieGraph::GetCenter() const {
+  return center_;
+}
+
+float PieGraph::GetRadius() const {
+  return radius_;
+}
+
 std::vector<float> PieGraph::GetProportions() const {
   std::vector<float> proportions;
 
