@@ -24,6 +24,15 @@ ScalePieGraphApp::ScalePieGraphApp() :
                        current_scale_.GetNumIntervals());
 }
 
+void ScalePieGraphApp::setup() {
+  // Create the params window
+  params_ = cinder::params::InterfaceGl::create(
+      getWindow(),
+      "Scales",
+      cinder::app::toPixels(
+          cinder::ivec2(kParamsWindowWidth, kParamsWindowHeight)));
+}
+
 void ScalePieGraphApp::draw() {
   ci::gl::clear(kBackgroundColor);
   graph_.Draw();
@@ -35,6 +44,10 @@ void ScalePieGraphApp::draw() {
 
   ci::gl::draw(text_box_texture_,
                glm::vec2(2 * current_width_ / 3, current_height_ / 4));
+
+  if (is_ready_) {
+    params_->draw();
+  }
 }
 
 void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
@@ -48,16 +61,18 @@ void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
 
 void ScalePieGraphApp::mouseUp(ci::app::MouseEvent event) {
   if (is_ready_) {
-    try {
-      current_scale_ = Scale("Custom",
-                             graph_.GetProportions(),
-                             current_scale_.GetNumOctaves());
-      UpdateText();
-    } catch (std::out_of_range&) {
-      graph_ = last_graph_; // Revert to previous state
-    }
+    if (current_handle_idx_ >= 0) { // Handle selected
+      try {
+        current_scale_ = Scale("Custom",
+                               graph_.GetProportions(),
+                               current_scale_.GetNumOctaves());
+        UpdateText();
+      } catch (std::out_of_range&) {
+        graph_ = last_graph_; // Revert to previous state
+      }
 
-    current_handle_idx_ = -1; // Handle deselected
+      current_handle_idx_ = -1; // Handle deselected
+    }
   }
 }
 
@@ -67,36 +82,59 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 
     if ((glm::distance2(mouse_pos, last_mouse_down_pos_) > 1) &&
         current_handle_idx_ >= 0) {
-      if (!graph_.UpdateHandle(current_handle_idx_, mouse_pos)) {
-        std::cout << "bad" << std::endl;
-      }
+      graph_.UpdateHandle(current_handle_idx_, mouse_pos);
     }
   }
 }
 
-// TODO - implement
-//void keyDown(ci::app::KeyEvent event);
+void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
+  if (is_ready_) {
+    switch (event.getCode()) {
+      case ci::app::KeyEvent::KEY_LEFT:
+        current_scale_ = scale_dataset_[scale_names_.front()];
+        graph_ = PieGraph(
+            graph_.GetCenter(),
+            graph_.GetRadius(),
+            current_scale_.GetProportions());
+        UpdateText();
+        break;
+
+      case ci::app::KeyEvent::KEY_RIGHT:
+        current_scale_ = scale_dataset_[scale_names_.front()];
+        graph_ = PieGraph(
+            graph_.GetCenter(),
+            graph_.GetRadius(),
+            current_scale_.GetProportions());
+        UpdateText();
+        break;
+    }
+  }
+}
 
 void ScalePieGraphApp::fileDrop(ci::app::FileDropEvent event) {
   std::ifstream scale_dataset_file;
   scale_dataset_file.open(event.getFile(0).string());
-  ScaleDataset dataset;
 
   try {
-    scale_dataset_file >> dataset;
-    scale_names_ = dataset.GetNames();
-    current_scale_ = dataset[scale_names_.front()];
-    graph_ = PieGraph(
-        graph_.GetCenter(),
-        graph_.GetRadius(),
-        current_scale_.GetProportions());
-    UpdateText();
+    scale_dataset_file >> scale_dataset_;
+    scale_names_ = scale_dataset_.GetNames();
+    UpdateScale(scale_names_.front());
+    CreateParams();
     is_ready_ = true;
   } catch (std::runtime_error&) {
     UpdateText("Invalid File");
   }
 
   scale_dataset_file.close();
+}
+
+void ScalePieGraphApp::UpdateScale(const std::string& new_scale_name) {
+  current_scale_ = scale_dataset_[new_scale_name];
+  graph_ = PieGraph(
+      graph_.GetCenter(),
+      graph_.GetRadius(),
+      current_scale_.GetProportions());
+  UpdateText();
 }
 
 void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
@@ -116,6 +154,12 @@ void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
   text_box_texture_ = ci::gl::Texture2d::create(text_box.render());
 }
 
+void ScalePieGraphApp::CreateParams() {
+  for (const std::string& name : scale_names_) {
+    params_->addButton(name, [this, name] { UpdateScale(name); });
+  }
 }
 
-}
+} // namespace frontend
+
+} // namespace scalepiegraph

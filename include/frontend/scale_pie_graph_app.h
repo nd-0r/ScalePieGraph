@@ -17,6 +17,8 @@ class ScalePieGraphApp : public ci::app::App {
  public:
   ScalePieGraphApp();
 
+  void setup() override;
+
   void draw() override;
 
   void mouseDown(ci::app::MouseEvent event) override;
@@ -33,7 +35,14 @@ class ScalePieGraphApp : public ci::app::App {
   const double kMargin = 100;
 
  private:
+  const double kParamsWindowWidth = 200;
+  const double kParamsWindowHeight = 600;
+
+  void UpdateScale(const std::string& new_scale_name);
+
   void UpdateText(const std::string& custom_text = "");
+
+  void CreateParams();
 
   bool is_ready_ = false; // App is not ready until the dataset is loaded
   const ci::Color kBackgroundColor = ci::Color("black");
@@ -48,7 +57,7 @@ class ScalePieGraphApp : public ci::app::App {
   std::vector<std::string> scale_names_;
   Scale current_scale_;
 
-  // ci::params::InterfaceGlRef params_;
+  ci::params::InterfaceGlRef params_;
 
   ci::gl::TextureRef text_box_texture_;
   PieGraph last_graph_;
