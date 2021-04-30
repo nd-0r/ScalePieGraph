@@ -3,6 +3,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Text.h"
 #include <core/scale_dataset.h>
 #include <frontend/pie_graph.h>
 #include <frontend/keyboard.h>
@@ -27,16 +28,18 @@ class ScalePieGraphApp : public ci::app::App {
   // Store previous pie graph so that it can be reverted if not a valid scale
 
   void mouseDrag(ci::app::MouseEvent event) override;
-//
-//  void keyDown(ci::app::KeyEvent event) override;
-//
-//  void fileDrop(ci::app::FileDropEvent event) override;
 
-  const double kDefaultWindowSize = 600;
-  const double kDefaultMargin = 20;
+  // void keyDown(ci::app::KeyEvent event) override;
+//
+  void fileDrop(ci::app::FileDropEvent event) override;
+
+  const double kMinWindowSize = 800;
+  const double kMargin = 100;
 
  private:
-  // TODO bool is_ready_ = false; // App is not ready until the dataset is loaded
+  void UpdateText();
+
+  bool is_ready_ = false; // App is not ready until the dataset is loaded
   const ci::Color kBackgroundColor = ci::Color("black");
   double current_width_;
   double current_height_;
@@ -46,8 +49,10 @@ class ScalePieGraphApp : public ci::app::App {
   int current_handle_idx_ = -1;
 
   ScaleDataset scale_dataset_;
+  std::vector<std::string> scale_names_;
   Scale current_scale_;
 
+  ci::gl::TextureRef text_box_texture_;
   PieGraph graph_;
   Keyboard keyboard_;
 };
