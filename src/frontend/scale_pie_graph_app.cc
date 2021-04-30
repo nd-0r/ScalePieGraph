@@ -11,7 +11,7 @@ ScalePieGraphApp::ScalePieGraphApp() :
     current_scale_(Scale(12)) { // Load a default 12 TET scale
   ci::app::setWindowSize(current_width_, current_height_);
 
-  UpdateText();
+  UpdateText("Drop scale dataset to begin");
 
   glm::vec2 graph_center(current_width_ / 3, current_height_ / 3);
   graph_ = PieGraph(graph_center,
@@ -33,11 +33,13 @@ void ScalePieGraphApp::draw() {
       title_,
       glm::vec2(current_width_ / 2, kMargin / 2), ci::Color("white"));
 
-  ci::gl::draw(text_box_texture_);
+  ci::gl::draw(text_box_texture_,
+               glm::vec2(2 * current_width_ / 3, current_height_ / 4));
 }
 
 void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
   if (is_ready_) {
+    last_graph_ = graph_;
     current_handle_idx_ = graph_.GetHandleIndex(event.getPos());
     std::cout << current_handle_idx_ << std::endl;
     last_mouse_down_pos_ = event.getPos();
@@ -46,6 +48,15 @@ void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
 
 void ScalePieGraphApp::mouseUp(ci::app::MouseEvent event) {
   if (is_ready_) {
+    try {
+      current_scale_ = Scale("Custom",
+                             graph_.GetProportions(),
+                             current_scale_.GetNumOctaves());
+      UpdateText();
+    } catch (std::out_of_range&) {
+      graph_ = last_graph_; // Revert to previous state
+    }
+
     current_handle_idx_ = -1; // Handle deselected
   }
 }
@@ -82,19 +93,23 @@ void ScalePieGraphApp::fileDrop(ci::app::FileDropEvent event) {
     UpdateText();
     is_ready_ = true;
   } catch (std::runtime_error&) {
-    title_ = "Invalid file";
-    info_ = "";
+    UpdateText("Invalid File");
   }
 
   scale_dataset_file.close();
 }
 
-void ScalePieGraphApp::UpdateText() {
-  title_ = current_scale_.GetName();
-  info_ = current_scale_.GetDescription();
+void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
+  if (custom_text.empty()) {
+    title_ = current_scale_.GetName();;
+    info_ = current_scale_.GetDescription();
+  } else {
+    title_ = custom_text;
+    info_ = "";
+  }
 
   ci::TextBox text_box = ci::TextBox().alignment(ci::TextBox::LEFT).size(
-      glm::vec2(current_width_ / 3.0, ci::TextBox::GROW));
+      glm::vec2((current_width_ - kMargin) / 3.0, ci::TextBox::GROW));
 
   text_box.text(info_).color(ci::Color("white"));
 
