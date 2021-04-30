@@ -171,6 +171,31 @@ bool Scale::operator!=(const Scale &other_scale) const {
   return !operator==(other_scale);
 }
 
+std::vector<float> Scale::ConvertProportionsToCents(
+    const std::vector<float>& proportions, size_t num_octaves) {
+  if (proportions.size() < 1) {
+    throw std::out_of_range(
+        "Provided proportions have less than one proportion");
+  }
+
+  std::vector<float> cents_intervals;
+
+  float last_interval = 0;
+  float total_cents = num_octaves * kCentsInOctave;
+  for (float proportion : proportions) {
+    if (proportion > 1 || proportion < 0) {
+      throw std::out_of_range(
+          "Proportions out of range 0, inclusive, to 1, inclusive.");
+    }
+
+    float current_interval = proportion * total_cents;
+    cents_intervals.push_back(current_interval - last_interval);
+    last_interval = current_interval;
+  }
+
+  return cents_intervals;
+}
+
 std::vector<float> Scale::ConvertDiatonicIntervalsToCents(
     const std::vector<size_t> &diatonic_intervals) {
   if (diatonic_intervals.size() < 2) {

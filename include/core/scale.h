@@ -125,6 +125,17 @@ class Scale {
   static const float kCentsInOctave;
 
   /**
+   * Convert proportions, in the range 0 inclusive to 1 inclusive, of a
+   * specified number of octaves to log-scale cents.
+   *
+   * @param proportions The proportions
+   * @param num_octaves The number of octaves that the proportions subdivide
+   * @return The representation of these proportions as pairwise log-scale cents
+   */
+  static std::vector<float> ConvertProportionsToCents(
+      const std::vector<float>& proportions, size_t num_octaves = 1);
+
+  /**
    * Convert pitches, recorded as diatonic intervals, to log-scale cents.
    *
    * @param diatonic_intervals The diatonic intervals to convert to intervals

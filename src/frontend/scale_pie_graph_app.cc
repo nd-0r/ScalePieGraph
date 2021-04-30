@@ -75,6 +75,10 @@ void ScalePieGraphApp::fileDrop(ci::app::FileDropEvent event) {
     scale_dataset_file >> dataset;
     scale_names_ = dataset.GetNames();
     current_scale_ = dataset[scale_names_.front()];
+    graph_ = PieGraph(
+        graph_.GetCenter(),
+        graph_.GetRadius(),
+        current_scale_.GetProportions());
     UpdateText();
     is_ready_ = true;
   } catch (std::runtime_error&) {
