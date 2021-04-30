@@ -31,37 +31,25 @@ void ScalePieGraphApp::draw() {
 }
 
 void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
-  last_mouse_down_pos = event.getPos();
-  std::cout << last_mouse_down_pos << std::endl;
+  current_handle_idx_ = graph_.GetHandleIndex(event.getPos());
+  std::cout << current_handle_idx_ << std::endl;
+  last_mouse_down_pos_ = event.getPos();
 }
 
 void ScalePieGraphApp::mouseUp(ci::app::MouseEvent event) {
-  float window_x_pos = event.getWindow()->getPos().x;
-  float window_y_pos = event.getWindow()->getPos().y;
-  glm::vec2 mouse_pos = glm::vec2(
-      event.getPos().x - window_x_pos, event.getPos().y - window_y_pos);
-  std::cout << mouse_pos << std::endl;
+  current_handle_idx_ = -1; // Handle deselected
+}
 
-  if (glm::distance(mouse_pos, last_mouse_down_pos) > 1) {
-    int handle_idx = graph_.GetHandleIndex(event.getPos());
-    std::cout << handle_idx << std::endl;
-    if (graph_.UpdateHandle(handle_idx, mouse_pos)) {
-      std::cout << "good" << std::endl;
+void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
+  glm::vec2 mouse_pos(event.getPos());
+
+  if ((glm::distance2(mouse_pos, last_mouse_down_pos_) > 1) &&
+      current_handle_idx_ >= 0) {
+    if (!graph_.UpdateHandle(current_handle_idx_, mouse_pos)) {
+      std::cout << "bad" << std::endl;
     }
-    std::cout << "bad" << std::endl;
   }
 }
-// TODO - fix
-/*void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
-  glm::vec2 mouse_pos = event.getPos();
-
-  if (glm::distance(mouse_pos, last_mouse_down_pos) > 1) {
-    int handle_idx = graph_.GetHandleIndex(mouse_pos);
-    if (graph_.UpdateHandle(handle_idx, mouse_pos)) {
-      std::cout << "good" << std::endl;
-    }
-  }
-}*/
 
 // TODO - implement
 //void keyDown(ci::app::KeyEvent event);

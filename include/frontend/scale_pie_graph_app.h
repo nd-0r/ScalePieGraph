@@ -21,10 +21,12 @@ class ScalePieGraphApp : public ci::app::App {
 
   void mouseUp(ci::app::MouseEvent event) override;
 
+  // void mouseUp(ci::app::MouseEvent event) override;
+
   // TODO
   // Store previous pie graph so that it can be reverted if not a valid scale
 
-  // void mouseDrag(ci::app::MouseEvent event) override;
+  void mouseDrag(ci::app::MouseEvent event) override;
 //
 //  void keyDown(ci::app::KeyEvent event) override;
 //
@@ -40,7 +42,8 @@ class ScalePieGraphApp : public ci::app::App {
   double current_height_;
   std::string title_;
   std::string info_;
-  glm::vec2 last_mouse_down_pos;
+  glm::vec2 last_mouse_down_pos_;
+  int current_handle_idx_ = -1;
 
   ScaleDataset scale_dataset_;
   Scale current_scale_;
