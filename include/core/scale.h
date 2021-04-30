@@ -22,11 +22,24 @@ class Scale {
    * @param name The name of this Scale
    * @param intervals The intervals in this Scale
    * @param description The description of this Scale, empty by default
+   * @param num_octaves The number of octaves of this Scale
    */
   Scale(const std::string& name,
         const std::vector<float>& intervals,
         const std::string& description = "",
         size_t num_octaves = 1);
+
+  /**
+   * Create a scale with the specified name and proportions. Scales are
+   * constructed by cumulative intervals, not pairwise intervals.
+   *
+   * @param name The name of this Scale
+   * @param proportions The proportions of this Scale
+   * @param num_octaves The number of octaves in this Scale
+   */
+  Scale(const std::string& name,
+        const std::vector<float>& proportions,
+        size_t num_octaves);
 
   /**
    * Create a scale with a specified number of equal-sized intervals.
@@ -103,6 +116,13 @@ class Scale {
    * @return The description of this Scale
    */
   const std::string& GetDescription() const;
+
+  /**
+   * Get the number of octaves that this Scale spans.
+   *
+   * @return The number of octaves that this Scale spans
+   */
+  size_t GetNumOctaves() const;
 
   /**
    * Determine if this Scale is equal to another scale. Two Scales are equal

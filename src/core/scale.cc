@@ -34,6 +34,14 @@ Scale::Scale(const std::string& name,
   }
 }
 
+Scale::Scale(const std::string& name,
+             const std::vector<float>& proportions,
+             size_t num_octaves) :
+    Scale(name,
+          ConvertProportionsToCents(proportions, num_octaves),
+          "",
+          num_octaves) {}
+
 Scale::Scale(size_t num_divisions) {
   if (num_divisions == 0) {
     throw std::out_of_range("Scale must have at least one interval!");
@@ -156,6 +164,10 @@ const std::string& Scale::GetName() const {
 
 const std::string& Scale::GetDescription() const {
   return description_;
+}
+
+size_t Scale::GetNumOctaves() const {
+  return num_octaves_;
 }
 
 bool Scale::operator==(const Scale &other_scale) const {
