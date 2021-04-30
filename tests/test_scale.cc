@@ -349,3 +349,57 @@ TEST_CASE("Convert frequencies to cents valid") {
     }
   }
 }
+
+TEST_CASE("Convert proportions to cents valid") {
+  SECTION("Single octave one-note scale") {
+    const std::vector<float> kProportions = {0.5};
+    const std::vector<float> kExpected = {600};
+
+    std::vector<float> outs = Scale::ConvertProportionsToCents(kProportions);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+
+  SECTION("Single octave multi-note scale") {
+    const std::vector<float> kProportions = {0.25, 0.5, 0.75, 1};
+    const std::vector<float> kExpected = {300, 300, 300, 300};
+
+    std::vector<float> outs = Scale::ConvertProportionsToCents(kProportions);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+
+  SECTION("Multiple octave one-note scale") {
+    const std::vector<float> kProportions = {0.5};
+    const std::vector<float> kExpected = {1200};
+
+    std::vector<float> outs = Scale::ConvertProportionsToCents(kProportions, 2);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+
+  SECTION("Multiple octave multi-note scale") {
+    const std::vector<float> kProportions = {0.25, 0.5, 0.75, 1};
+    const std::vector<float> kExpected = {600, 600, 600, 600};
+
+    std::vector<float> outs = Scale::ConvertProportionsToCents(kProportions, 2);
+
+    size_t idx = 0;
+    for (float out : outs) {
+      REQUIRE(out == Approx(kExpected[idx]));
+      ++idx;
+    }
+  }
+}
