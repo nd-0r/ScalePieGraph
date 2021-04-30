@@ -2,8 +2,7 @@
 #pragma once
 
 #include <cstdlib>
-#include <glm/detail/type_vec2.hpp>
-#include <glm/vec2.hpp>
+#include "cinder/gl/gl.h"
 #include <cinder/Path2d.h>
 #include <cinder/Shape2d.h>
 #include <cinder/gl/draw.h>
@@ -80,12 +79,11 @@ class PieGraph {
 
   ci::Path2d current_arc_;
   std::vector<ci::Path2d> current_handles_;
-
   glm::vec2 center_;
   float radius_;
   std::vector<float> division_radians_;
 };
 
-}
+} // namespace frontend
 
-}
+} // namespace scalepiegraph

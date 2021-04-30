@@ -5,7 +5,7 @@ namespace scalepiegraph {
 
 namespace frontend {
 
-const float PieGraph::kCircleStartOffset = 0.5 * glm::pi<float>();
+const float PieGraph::kCircleStartOffset = 1.5 * glm::pi<float>();
 const float PieGraph::kHandleRadius = 5;
 const ci::Color PieGraph::kStrokeColor = ci::Color("white");
 
@@ -25,7 +25,7 @@ void PieGraph::Draw() {
   ci::Path2d end_caps;
 
   float arc_end = division_radians_.back() + kCircleStartOffset;
-  outer_arc.arc(center_, radius_, kCircleStartOffset, -arc_end, false);
+  outer_arc.arc(center_, -radius_, -kCircleStartOffset, -arc_end, false);
   outer_arc.lineTo(center_);
 
   glm::vec2 start(center_.x, center_.y - radius_);
@@ -57,8 +57,8 @@ int PieGraph::GetHandleIndex(const glm::vec2& pos) const {
 
 bool PieGraph::UpdateHandle(size_t handle_index, glm::vec2 mouse_pos) {
   float curr_angle = division_radians_[handle_index];
-  glm::vec2 mouse_vec = mouse_pos - center_;
-  glm::vec2 rad_vec(0, radius_);
+  glm::vec2 mouse_vec(mouse_pos - center_);
+  glm::vec2 rad_vec(0, -radius_);
   glm::vec2 rad_vec_left_normal(-radius_, 0);
 
   float new_handle_angle = glm::acos(glm::dot(rad_vec, mouse_vec) /
@@ -104,11 +104,9 @@ std::vector<float> PieGraph::GetProportions() const {
 void PieGraph::CreateHandles(bool should_draw) {
   current_handles_ = std::vector<ci::Path2d>();
 
-  glm::vec2 rad_vec = glm::vec2(center_.x, center_.y - radius_) - center_;
+  glm::vec2 rad_vec = glm::vec2(0, -radius_);
 
   for (float sweep : division_radians_) {
-    sweep += kCircleStartOffset;
-
     float new_x = glm::cos(sweep) * rad_vec.x + glm::sin(sweep) * rad_vec.y;
     float new_y = -glm::sin(sweep) * rad_vec.x + glm::cos(sweep) * rad_vec.y;
     glm::vec2 handle_point = glm::vec2(new_x + center_.x, new_y + center_.y);

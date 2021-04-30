@@ -15,6 +15,7 @@ const Scale& ScaleDataset::operator[](const std::string& name) const {
   return scales_by_name_.at(name);
 }
 
+// TODO - add inline comments
 std::istream& operator>>(std::istream& input_stream, ScaleDataset& dataset) {
   Json::Value root;
   input_stream >> root;
@@ -67,4 +68,4 @@ std::istream& operator>>(std::istream& input_stream, ScaleDataset& dataset) {
   return input_stream;
 }
 
-}
+} // scalepiegraph
