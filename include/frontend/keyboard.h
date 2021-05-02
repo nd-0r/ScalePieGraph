@@ -38,6 +38,15 @@ class Keyboard {
   void Draw();
 
   /**
+   * Get the key index corresponding to the current position of the mouse, or -1
+   * if the mouse is not in the bounds of a key.
+   *
+   * @param mouse_pos The current coordinates of the mouse pointer
+   * @return The key index if found; otherwise, -1
+   */
+   int GetKeyIndex(const glm::vec2& mouse_pos) const;
+
+  /**
    * Update the number of divisions of this keyboard to the specified number.
    *
    * @param num_divisions The new number of divisions for this keyboard
