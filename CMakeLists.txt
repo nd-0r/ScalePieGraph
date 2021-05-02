@@ -68,7 +68,6 @@ list(APPEND CORE_SOURCE_FILES src/core/scale.cc
                               src/core/scale_dataset.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
-                            src/frontend/canvas.cc
                             src/frontend/scale_pie_graph_app.cc
                             src/frontend/keyboard.cc
                             src/frontend/pie_graph.cc)
