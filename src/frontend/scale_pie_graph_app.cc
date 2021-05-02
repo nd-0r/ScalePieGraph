@@ -47,6 +47,12 @@ void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
     current_handle_idx_ = graph_.GetHandleIndex(event.getPos());
     std::cout << current_handle_idx_ << std::endl;
     last_mouse_down_pos_ = event.getPos();
+
+    int key_idx = keyboard_.GetKeyIndex(event.getPos());
+    std::cout << "Down Key index: " << key_idx << std::endl;
+    if (key_idx >= 0) {
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(key_idx));
+    }
   }
 }
 
@@ -64,6 +70,8 @@ void ScalePieGraphApp::mouseUp(ci::app::MouseEvent event) {
 
       current_handle_idx_ = -1; // Handle deselected
     }
+
+    synthesizer_.Stop();
   }
 }
 
@@ -133,6 +141,8 @@ void ScalePieGraphApp::UpdateScale(const std::string& new_scale_name) {
       graph_.GetRadius(),
       current_scale_.GetProportions());
   UpdateText();
+
+  keyboard_.UpdateDivisions(current_scale_.GetNumIntervals() + 1);
 }
 
 void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
