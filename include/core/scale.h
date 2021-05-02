@@ -73,13 +73,13 @@ class Scale {
    * Calculate the frequency of the specified note based on the given base
    * frequency.
    *
-   * @param base_freq The base frequency of this Scale
    * @param note_index The zero-based index of the note in this Scale whose
    * frequency to calculate.
+   * @param base_freq The base frequency of this Scale; default 440
    * @return The frequency of the specified note in this Scale based on
    * he given base frequency
    */
-  double CalculateNoteFrequency(float base_freq, size_t note_index) const;
+  double CalculateNoteFrequency(size_t note_index, float base_freq=440.0) const;
 
   /**
    * Get the specified pairwise interval of this scale.
