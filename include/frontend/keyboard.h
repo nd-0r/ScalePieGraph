@@ -54,10 +54,19 @@ class Keyboard {
   void UpdateDivisions(size_t num_divisions);
 
  private:
+  /**
+   * Create the keys for this keyboard.
+   *
+   * @param should_draw Whether the keys should be drawn or not
+   */
+  void CreateKeys(bool should_draw);
+
   glm::vec2 bottom_left_corner_;
   float width_;
   float height_;
   size_t current_divisions_;
+
+  std::vector<ci::Path2d> keys_;
 };
 
 }
