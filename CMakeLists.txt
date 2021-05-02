@@ -75,7 +75,8 @@ list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
 
 list(APPEND TEST_FILES    tests/test_scale.cc
                           tests/test_scale_dataset.cc
-                          tests/test_pie_graph.cc)
+                          tests/test_pie_graph.cc
+                          tests/test_keyboard.cc)
 
 ci_make_app(
         APP_NAME        scale-pie-graph-debug

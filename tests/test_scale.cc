@@ -188,7 +188,7 @@ TEST_CASE("Calculate Note Frequency Valid") {
     const double kExpectedFreq = 440;
     Scale test_scale(12);
 
-    double freq = test_scale.CalculateNoteFrequency(440, 0);
+    double freq = test_scale.CalculateNoteFrequency(0);
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
@@ -197,7 +197,7 @@ TEST_CASE("Calculate Note Frequency Valid") {
     const double kExpectedFreq = 587.3296;
     Scale test_scale(12);
 
-    double freq = test_scale.CalculateNoteFrequency(440, 5);
+    double freq = test_scale.CalculateNoteFrequency(5);
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
@@ -206,7 +206,7 @@ TEST_CASE("Calculate Note Frequency Valid") {
     const double kExpectedFreq = 830.60956;
     Scale test_scale(12);
 
-    double freq = test_scale.CalculateNoteFrequency(440, 11);
+    double freq = test_scale.CalculateNoteFrequency(11);
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
@@ -219,7 +219,7 @@ TEST_CASE("Calculate Note Frequency Valid") {
                                                111.73, 92.18};
     Scale test_scale("Just Major", just_major_intervals);
 
-    double freq = test_scale.CalculateNoteFrequency(440, 3);
+    double freq = test_scale.CalculateNoteFrequency(3);
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
