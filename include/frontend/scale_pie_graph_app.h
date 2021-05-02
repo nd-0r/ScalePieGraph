@@ -6,6 +6,7 @@
 #include "cinder/Text.h"
 #include "cinder/params/Params.h"
 #include <core/scale_dataset.h>
+#include <core/synthesizer.h>
 #include <frontend/pie_graph.h>
 #include <frontend/keyboard.h>
 
@@ -16,8 +17,6 @@ namespace frontend {
 class ScalePieGraphApp : public ci::app::App {
  public:
   ScalePieGraphApp();
-
-  void setup() override;
 
   void draw() override;
 
@@ -42,7 +41,7 @@ class ScalePieGraphApp : public ci::app::App {
 
   void UpdateText(const std::string& custom_text = "");
 
-  void CreateParams();
+  void CreateParamsWindow();
 
   bool is_ready_ = false; // App is not ready until the dataset is loaded
   const ci::Color kBackgroundColor = ci::Color("black");
@@ -63,6 +62,7 @@ class ScalePieGraphApp : public ci::app::App {
   PieGraph last_graph_;
   PieGraph graph_;
   Keyboard keyboard_;
+  Synthesizer synthesizer_;
 };
 
 }  // namespace frontend

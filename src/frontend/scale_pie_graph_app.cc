@@ -24,15 +24,6 @@ ScalePieGraphApp::ScalePieGraphApp() :
                        current_scale_.GetNumIntervals());
 }
 
-void ScalePieGraphApp::setup() {
-  // Create the params window
-  params_ = cinder::params::InterfaceGl::create(
-      getWindow(),
-      "Scales",
-      cinder::app::toPixels(
-          cinder::ivec2(kParamsWindowWidth, kParamsWindowHeight)));
-}
-
 void ScalePieGraphApp::draw() {
   ci::gl::clear(kBackgroundColor);
   graph_.Draw();
@@ -46,7 +37,7 @@ void ScalePieGraphApp::draw() {
                glm::vec2(2 * current_width_ / 3, current_height_ / 4));
 
   if (is_ready_) {
-    params_->draw();
+    params_->draw(); // TODO - fix
   }
 }
 
@@ -84,9 +75,16 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
         current_handle_idx_ >= 0) {
       graph_.UpdateHandle(current_handle_idx_, mouse_pos);
     }
+
+    int key_idx = keyboard_.GetKeyIndex(event.getPos());
+    if (key_idx >= 0) {
+      std::cout << "Key index: " << key_idx << std::endl;
+      synthesizer_.SetFrequency(current_scale_.CalculateNoteFrequency(key_idx));
+    }
   }
 }
 
+// TODO - fix
 void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
   if (is_ready_) {
     switch (event.getCode()) {
@@ -119,7 +117,7 @@ void ScalePieGraphApp::fileDrop(ci::app::FileDropEvent event) {
     scale_dataset_file >> scale_dataset_;
     scale_names_ = scale_dataset_.GetNames();
     UpdateScale(scale_names_.front());
-    CreateParams();
+    CreateParamsWindow(); // TODO - put back
     is_ready_ = true;
   } catch (std::runtime_error&) {
     UpdateText("Invalid File");
@@ -154,7 +152,20 @@ void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
   text_box_texture_ = ci::gl::Texture2d::create(text_box.render());
 }
 
-void ScalePieGraphApp::CreateParams() {
+void ScalePieGraphApp::CreateParamsWindow() {
+  ci::app::RendererRef new_renderer = ci::app::Renderer2d::create();
+
+  ci::app::WindowRef new_window = createWindow(
+      ci::app::Window::Format(new_renderer)
+      .size(kParamsWindowWidth, kParamsWindowHeight));
+
+  new_renderer->startDraw();
+
+  params_ = cinder::params::InterfaceGl::create(
+      new_window,
+      "Scales",
+      glm::vec2(current_width_, current_height_));
+
   for (const std::string& name : scale_names_) {
     params_->addButton(name, [this, name] { UpdateScale(name); });
   }
