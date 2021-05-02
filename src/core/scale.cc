@@ -113,7 +113,7 @@ void Scale::RemoveInterval() {
   intervals_.pop_back();
 }
 
-double Scale::CalculateNoteFrequency(float base_freq, size_t note_index) const {
+double Scale::CalculateNoteFrequency(size_t note_index, float base_freq) const {
   if (base_freq < 0) {
     throw std::out_of_range("Base frequency must be a positive real number");
   }
@@ -122,7 +122,7 @@ double Scale::CalculateNoteFrequency(float base_freq, size_t note_index) const {
     return base_freq;
   }
 
-  if (note_index > intervals_.size() - 1) {
+  if (note_index > intervals_.size()) {
     throw std::out_of_range("Invalid interval index for this scale!");
   }
 
