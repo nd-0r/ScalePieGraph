@@ -17,9 +17,10 @@ Synthesizer::Synthesizer() : context_(ci::audio::Context::master()) {
   filter_->connect(gain_);
   gain_->connect(context_->getOutput());
 
-  oscillator_->enable();
   filter_->enable();
   gain_->enable();
+
+  context_->enable();
 }
 
 void Synthesizer::Start(double frequency) const {
@@ -29,11 +30,11 @@ void Synthesizer::Start(double frequency) const {
 
   oscillator_->setFreq(frequency);
 
-  context_->enable();
+  oscillator_->enable();
 }
 
 void Synthesizer::Stop() const {
-  context_->disable();
+  oscillator_->disable();
 }
 
 void Synthesizer::SetFrequency(double frequency) const {
