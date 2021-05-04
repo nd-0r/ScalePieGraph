@@ -94,24 +94,23 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 
 // TODO - fix
 void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
+
+  /*current_scale_ = scale_dataset_[scale_names_.front()];
+  graph_ = PieGraph(
+      graph_.GetCenter(),
+      graph_.GetRadius(),
+      current_scale_.GetProportions());
+  UpdateText();
+  break;*/
+
   if (is_ready_) {
     switch (event.getCode()) {
-      case ci::app::KeyEvent::KEY_LEFT:
-        current_scale_ = scale_dataset_[scale_names_.front()];
-        graph_ = PieGraph(
-            graph_.GetCenter(),
-            graph_.GetRadius(),
-            current_scale_.GetProportions());
-        UpdateText();
+      case ci::app::KeyEvent::KEY_EQUALS:
+
         break;
 
-      case ci::app::KeyEvent::KEY_RIGHT:
-        current_scale_ = scale_dataset_[scale_names_.front()];
-        graph_ = PieGraph(
-            graph_.GetCenter(),
-            graph_.GetRadius(),
-            current_scale_.GetProportions());
-        UpdateText();
+      case ci::app::KeyEvent::KEY_MINUS:
+
         break;
     }
   }

@@ -26,14 +26,14 @@ TEST_CASE("Construct Custom Scale Invalid") {
 }
 
 TEST_CASE("Construct Chromatic Scale Valid") {
-  SECTION("1 TET") {
-    const size_t num_divisions = 1;
-    const float kExpectedInterval = 1200;
-    const std::string kExpectedName = "Chromatic Scale 1 TET";
+  SECTION("2 TET") {
+    const size_t num_divisions = 2;
+    const float kExpectedInterval = 600;
+    const std::string kExpectedName = "Chromatic Scale 2 TET";
 
     Scale test_scale = Scale(num_divisions);
 
-    REQUIRE(test_scale.GetNumIntervals() == num_divisions);
+    REQUIRE(test_scale.GetNumIntervals() == num_divisions - 1);
     REQUIRE(test_scale.GetName() == kExpectedName);
     REQUIRE(test_scale.GetInterval(0) == kExpectedInterval);
   }
@@ -45,10 +45,10 @@ TEST_CASE("Construct Chromatic Scale Valid") {
 
     Scale test_scale = Scale(num_divisions);
 
-    REQUIRE(test_scale.GetNumIntervals() == num_divisions);
+    REQUIRE(test_scale.GetNumIntervals() == num_divisions - 1);
     REQUIRE(test_scale.GetName() == kExpectedName);
 
-    for (size_t inter_idx = 0; inter_idx < num_divisions; ++inter_idx) {
+    for (size_t inter_idx = 0; inter_idx < num_divisions - 1; ++inter_idx) {
       REQUIRE(test_scale.GetInterval(inter_idx) == Approx(kExpectedInterval));
     }
   }
@@ -60,10 +60,10 @@ TEST_CASE("Construct Chromatic Scale Valid") {
 
     Scale test_scale = Scale(num_divisions);
 
-    REQUIRE(test_scale.GetNumIntervals() == num_divisions);
+    REQUIRE(test_scale.GetNumIntervals() == num_divisions - 1);
     REQUIRE(test_scale.GetName() == kExpectedName);
 
-    for (size_t inter_idx = 0; inter_idx < num_divisions; ++inter_idx) {
+    for (size_t inter_idx = 0; inter_idx < num_divisions - 1; ++inter_idx) {
       REQUIRE(test_scale.GetInterval(inter_idx) == Approx(kExpectedInterval));
     }
   }
@@ -81,8 +81,8 @@ TEST_CASE("Construct Chromatic Scale Invalid") {
 
 TEST_CASE("Scale Equality") {
   SECTION("Scales equal single interval") {
-    Scale test_scale_one = Scale(1);
-    Scale test_scale_two = Scale(1);
+    Scale test_scale_one = Scale(2);
+    Scale test_scale_two = Scale(2);
 
     REQUIRE(test_scale_one == test_scale_two);
   }
@@ -179,7 +179,7 @@ TEST_CASE("Update Interval Size Invalid") {
     Scale test_scale(12);
 
     REQUIRE_THROWS_AS(
-        test_scale.UpdateIntervalSize(2, 1.01), std::out_of_range);
+        test_scale.UpdateIntervalSize(2, 2.01), std::out_of_range);
   }
 }
 
@@ -223,28 +223,36 @@ TEST_CASE("Calculate Note Frequency Valid") {
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
+
+  SECTION("12 TET Chromatic Note 11 8va") {
+    const double kExpectedFreq = 2 * 830.60956;
+    Scale test_scale(12);
+
+    double freq = test_scale.CalculateNoteFrequency(23);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
+
+  SECTION("Just Tuned Major Note 3 16va") {
+    const double kExpectedFreq = 4 * 528;
+    std::vector<float> just_major_intervals = {111.73, 92.18, 111.73,
+                                               70.67, 111.73, 84.47,
+                                               119.45, 111.73, 70.67,
+                                               111.73, 92.18};
+    Scale test_scale("Just Major", just_major_intervals);
+
+    double freq = test_scale.CalculateNoteFrequency(27);
+
+    REQUIRE(freq == Approx(kExpectedFreq));
+  }
 }
 
 TEST_CASE("Calculate Note Frequency Invalid") {
-  SECTION("Negative note index") {
-    Scale test_scale(12);
-
-    REQUIRE_THROWS_AS(
-        test_scale.CalculateNoteFrequency(440, -1), std::out_of_range);
-  }
-
-  SECTION("Note index too large") {
-    Scale test_scale(12);
-
-    REQUIRE_THROWS_AS(
-        test_scale.CalculateNoteFrequency(440, 12), std::out_of_range);
-  }
-
   SECTION("Negative frequency") {
     Scale test_scale(12);
 
     REQUIRE_THROWS_AS(
-        test_scale.CalculateNoteFrequency(-1, 4), std::out_of_range);
+        test_scale.CalculateNoteFrequency(1, -440), std::out_of_range);
   }
 }
 

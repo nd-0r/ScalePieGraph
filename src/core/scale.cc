@@ -43,7 +43,7 @@ Scale::Scale(const std::string& name,
           num_octaves) {}
 
 Scale::Scale(size_t num_divisions) {
-  if (num_divisions == 0) {
+  if (num_divisions < 2) {
     throw std::out_of_range("Scale must have at least one interval!");
   }
 
@@ -52,11 +52,11 @@ Scale::Scale(size_t num_divisions) {
   }
 
   name_ = "Chromatic Scale " + std::to_string(num_divisions) + " TET";
-  intervals_ = std::vector<float>(num_divisions);
+  intervals_ = std::vector<float>(num_divisions - 1);
 
   float inter_size = kCentsInOctave / num_divisions;
   float current_span = 0;
-  for (size_t inter_index = 0; inter_index < num_divisions; ++inter_index) {
+  for (size_t inter_index = 0; inter_index < num_divisions - 1; ++inter_index) {
     current_span += inter_size;
 
     intervals_[inter_index] = current_span;
@@ -114,22 +114,21 @@ void Scale::RemoveInterval() {
 }
 
 double Scale::CalculateNoteFrequency(size_t note_index, float base_freq) const {
-  if (base_freq < 0) {
+  if (base_freq <= 0) {
     throw std::out_of_range("Base frequency must be a positive real number");
   }
 
-  if (note_index == 0) {
-    return base_freq;
-  }
+  size_t extra_octaves = note_index / (intervals_.size() + 1);
+  note_index %= (intervals_.size() + 1);
 
-  if (note_index > intervals_.size()) {
-    throw std::out_of_range("Invalid interval index for this scale!");
+  if (note_index == 0) {
+    return base_freq * pow(2, extra_octaves);
   }
 
   double freq =
       base_freq * std::pow(2, (intervals_[note_index - 1] / kCentsInOctave));
 
-  return freq;
+  return freq * pow(2, extra_octaves);
 }
 
 float Scale::GetInterval(size_t inter_index) const {
