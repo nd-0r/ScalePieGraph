@@ -5,6 +5,10 @@ namespace scalepiegraph {
 
 namespace frontend {
 
+const ci::Color Keyboard::kStrokeColor = ci::Color("white");
+const ci::Color Keyboard::kKeyColor = ci::Color("black");
+const ci::Color Keyboard::kOctaveShade = ci::Color("grey");
+
 Keyboard::Keyboard(const glm::vec2& bottom_left_corner,
                    float width,
                    float height,
@@ -46,8 +50,10 @@ void Keyboard::UpdateDivisions(size_t num_divisions) {
 void Keyboard::CreateKeys(bool should_draw) {
   keys_ = std::vector<ci::Path2d>();
 
-  for (size_t div_idx = 0; div_idx < current_divisions_; ++div_idx) {
-    float width_unit = width_ / current_divisions_;
+  for (size_t div_idx = 0;
+       div_idx < current_divisions_ * num_octaves_;
+       ++div_idx) {
+    float width_unit = width_ / (current_divisions_ * num_octaves_);
 
     glm::vec2 upper_left_corner(
         div_idx * width_unit, bottom_left_corner_.y - height_);
@@ -66,11 +72,28 @@ void Keyboard::CreateKeys(bool should_draw) {
     key.close();
 
     if (should_draw) {
+      if (div_idx % (current_divisions_ - 1) == 0) {
+        ci::gl::color(kOctaveShade);
+        ci::gl::drawSolid(key);
+      } else {
+        ci::gl::color(kKeyColor);
+        ci::gl::drawSolid(key);
+      }
+
+      ci::gl::color(kStrokeColor);
       ci::gl::draw(key);
     }
 
     keys_.push_back(key);
   }
+}
+
+void Keyboard::SetNumOctaves(size_t num_octaves) {
+  num_octaves_ = num_octaves;
+}
+
+size_t Keyboard::GetNumOctaves() const {
+  return num_octaves_;
 }
 
 }

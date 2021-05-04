@@ -41,6 +41,7 @@ class ScalePieGraphApp : public ci::app::App {
   void CreateParamsWindow();
 
   const ci::Color kBackgroundColor = ci::Color("black");
+  const size_t kMaxOctaves = 4;
 
   bool is_ready_ = false; // App is not ready until the dataset is loaded
   double current_width_;

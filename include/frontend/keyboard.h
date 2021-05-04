@@ -53,7 +53,25 @@ class Keyboard {
    */
   void UpdateDivisions(size_t num_divisions);
 
+  /**
+   * Set the number of octaves that this keyboard represents.
+   *
+   * @param num_octaves The number of octaves that this scale represents.
+   */
+   void SetNumOctaves(size_t num_octaves);
+
+  /**
+   * Get the number of octaves that this keyboard represents.
+   *
+   * @return The number of octaves that this keyboard represents
+   */
+   size_t GetNumOctaves() const;
+
  private:
+  static const ci::Color kStrokeColor;
+  static const ci::Color kKeyColor;
+  static const ci::Color kOctaveShade;
+
   /**
    * Create the keys for this keyboard.
    *
@@ -65,6 +83,7 @@ class Keyboard {
   float width_;
   float height_;
   size_t current_divisions_;
+  size_t num_octaves_ = 1;
 
   std::vector<ci::Path2d> keys_;
 };

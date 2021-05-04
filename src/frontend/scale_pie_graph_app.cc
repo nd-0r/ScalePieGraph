@@ -106,11 +106,19 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
         UpdateScale(scale_names_[current_scale_idx_--]);
         break;
       case ci::app::KeyEvent::KEY_EQUALS:
+        if (keyboard_.GetNumOctaves() == kMaxOctaves) {
+          break;
+        }
 
+        keyboard_.SetNumOctaves(keyboard_.GetNumOctaves() + 1);
         break;
 
-      case ci::app::KeyEvent::KEY_MINUS:
+      case ci::app::KeyEvent::KEY_KP_MINUS:
+        if (keyboard_.GetNumOctaves() == 1) {
+          break; // Cannot have less than one octave
+        }
 
+        keyboard_.SetNumOctaves(keyboard_.GetNumOctaves() - 1);
         break;
     }
   }
