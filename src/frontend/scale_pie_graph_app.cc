@@ -91,6 +91,7 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
   if (is_ready_) {
     UpdateWaveform(event);
+    HandleKeyboardNotes(event);
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_RIGHT:
         if (current_scale_idx_ == scale_names_.size() - 1) {
@@ -133,6 +134,47 @@ void ScalePieGraphApp::UpdateWaveform(ci::app::KeyEvent event) {
       break;
     case ci::app::KeyEvent::KEY_r:
       synthesizer_.SetWaveform(ci::audio::WaveformType::SAWTOOTH);
+      break;
+  }
+}
+
+void ScalePieGraphApp::HandleKeyboardNotes(ci::app::KeyEvent event) {
+  switch (event.getCode()) {
+    case ci::app::KeyEvent::KEY_a:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(0));
+      break;
+    case ci::app::KeyEvent::KEY_s:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(1));
+      break;
+    case ci::app::KeyEvent::KEY_d:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(2));
+      break;
+    case ci::app::KeyEvent::KEY_f:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(3));
+      break;
+    case ci::app::KeyEvent::KEY_g:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(4));
+      break;
+    case ci::app::KeyEvent::KEY_h:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(5));
+      break;
+    case ci::app::KeyEvent::KEY_j:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(6));
+      break;
+    case ci::app::KeyEvent::KEY_k:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(7));
+      break;
+    case ci::app::KeyEvent::KEY_l:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(8));
+      break;
+    case ci::app::KeyEvent::KEY_SEMICOLON:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(9));
+      break;
+    case ci::app::KeyEvent::KEY_QUOTE:
+      synthesizer_.Start(current_scale_.CalculateNoteFrequency(10));
+      break;
+    case ci::app::KeyEvent::KEY_SPACE:
+      synthesizer_.Stop();
       break;
   }
 }
