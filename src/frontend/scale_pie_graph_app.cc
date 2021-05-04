@@ -45,9 +45,8 @@ void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
     last_mouse_down_pos_ = event.getPos();
 
     int key_idx = keyboard_.GetKeyIndex(event.getPos());
-    std::cout << "Down Key index: " << key_idx << std::endl;
     if (key_idx >= 0) {
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(key_idx));
+      StartSynthesizer(key_idx);
     }
   }
 }
@@ -82,8 +81,8 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 
     int key_idx = keyboard_.GetKeyIndex(event.getPos());
     if (key_idx >= 0) {
-      std::cout << "Key index: " << key_idx << std::endl;
-      synthesizer_.SetFrequency(current_scale_.CalculateNoteFrequency(key_idx));
+      synthesizer_.SetFrequency(current_scale_.CalculateNoteFrequency(
+          key_idx, base_scale_.CalculateNoteFrequency(current_transposition_)));
     }
   }
 }
@@ -92,6 +91,7 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
   if (is_ready_) {
     UpdateWaveform(event);
     HandleKeyboardNotes(event);
+    HandleTransposition(event);
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_RIGHT:
         if (current_scale_idx_ == scale_names_.size() - 1) {
@@ -121,6 +121,11 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
   }
 }
 
+void ScalePieGraphApp::StartSynthesizer(size_t note_idx) {
+  synthesizer_.Start(current_scale_.CalculateNoteFrequency(
+      note_idx, base_scale_.CalculateNoteFrequency(current_transposition_)));
+}
+
 void ScalePieGraphApp::UpdateWaveform(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_q:
@@ -141,40 +146,57 @@ void ScalePieGraphApp::UpdateWaveform(ci::app::KeyEvent event) {
 void ScalePieGraphApp::HandleKeyboardNotes(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_a:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(0));
+      StartSynthesizer(0);
       break;
     case ci::app::KeyEvent::KEY_s:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(1));
+      StartSynthesizer(1);
       break;
     case ci::app::KeyEvent::KEY_d:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(2));
+      StartSynthesizer(2);
       break;
     case ci::app::KeyEvent::KEY_f:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(3));
+      StartSynthesizer(3);
       break;
     case ci::app::KeyEvent::KEY_g:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(4));
+      StartSynthesizer(4);
       break;
     case ci::app::KeyEvent::KEY_h:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(5));
+      StartSynthesizer(5);
       break;
     case ci::app::KeyEvent::KEY_j:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(6));
+      StartSynthesizer(6);
       break;
     case ci::app::KeyEvent::KEY_k:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(7));
+      StartSynthesizer(7);
       break;
     case ci::app::KeyEvent::KEY_l:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(8));
+      StartSynthesizer(8);
       break;
     case ci::app::KeyEvent::KEY_SEMICOLON:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(9));
+      StartSynthesizer(9);
       break;
     case ci::app::KeyEvent::KEY_QUOTE:
-      synthesizer_.Start(current_scale_.CalculateNoteFrequency(10));
+      StartSynthesizer(10);
       break;
     case ci::app::KeyEvent::KEY_SPACE:
       synthesizer_.Stop();
+      break;
+  }
+}
+
+void ScalePieGraphApp::HandleTransposition(ci::app::KeyEvent event) {
+  switch (event.getCode()) {
+    case ci::app::KeyEvent::KEY_UP:
+      if (current_transposition_ == base_scale_.GetNumNotes()) {
+        break; // No more notes in the base scale
+      }
+      ++current_transposition_;
+      break;
+    case ci::app::KeyEvent::KEY_DOWN:
+      if (current_transposition_ == 0) {
+        break; // No less notes in the base scale
+      }
+      --current_transposition_;
       break;
   }
 }

@@ -34,9 +34,13 @@ class ScalePieGraphApp : public ci::app::App {
   const double kMargin = 100;
 
  private:
+  void StartSynthesizer(size_t note_idx);
+
   void UpdateWaveform(ci::app::KeyEvent event);
 
   void HandleKeyboardNotes(ci::app::KeyEvent event);
+
+  void HandleTransposition(ci::app::KeyEvent event);
 
   void UpdateScale(const std::string& new_scale_name);
 
@@ -55,6 +59,8 @@ class ScalePieGraphApp : public ci::app::App {
 
   ScaleDataset scale_dataset_;
   std::vector<std::string> scale_names_;
+  Scale base_scale_ = Scale(12); // Base scale to use for transposition
+  size_t current_transposition_ = 0;
   Scale current_scale_;
   size_t current_scale_idx_ = 0;
 
