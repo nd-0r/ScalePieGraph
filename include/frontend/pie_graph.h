@@ -82,7 +82,8 @@ class PieGraph {
  private:
   static const float kCircleStartOffset;
   static const float kHandleRadius;
-  static const ci::Color kStrokeColor;
+  static const ci::Color kStrokeColorPrimary;
+  static const ci::Color kStrokeColorSecondary;
 
   /**
    * Create the handles for this Pie Graph and optionally draw them.

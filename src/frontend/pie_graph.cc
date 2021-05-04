@@ -7,7 +7,8 @@ namespace frontend {
 
 const float PieGraph::kCircleStartOffset = 1.5 * glm::pi<float>();
 const float PieGraph::kHandleRadius = 5;
-const ci::Color PieGraph::kStrokeColor = ci::Color("white");
+const ci::Color PieGraph::kStrokeColorPrimary = ci::Color("white");
+const ci::Color PieGraph::kStrokeColorSecondary = ci::Color("grey");
 
 PieGraph::PieGraph(
     const glm::vec2& pos, float radius, std::vector<float> proportions) :
@@ -22,17 +23,23 @@ PieGraph::PieGraph(
 
 void PieGraph::Draw() {
   ci::Path2d outer_arc;
+  ci::Path2d arc_tail_shadow;
   ci::Path2d end_caps;
 
   float arc_end = division_radians_.back() + kCircleStartOffset;
   outer_arc.arc(center_, -radius_, -kCircleStartOffset, -arc_end, false);
   outer_arc.lineTo(center_);
 
+  arc_tail_shadow.arc(center_, -radius_, -arc_end, -kCircleStartOffset, false);
+
   glm::vec2 start(center_.x, center_.y - radius_);
   end_caps.moveTo(center_);
   end_caps.lineTo(start);
 
-  ci::gl::color(kStrokeColor);
+  ci::gl::color(kStrokeColorSecondary);
+  ci::gl::draw(arc_tail_shadow);
+
+  ci::gl::color(kStrokeColorPrimary);
   ci::gl::draw(outer_arc);
   ci::gl::draw(end_caps);
 
@@ -135,7 +142,7 @@ void PieGraph::CreateHandles(bool should_draw) {
     current_handles_.push_back(handle);
 
     if (should_draw) {
-      ci::gl::color(kStrokeColor);
+      ci::gl::color(kStrokeColorPrimary);
       ci::gl::drawLine(center_, handle_point);
       ci::gl::drawSolid(handle);
     }
