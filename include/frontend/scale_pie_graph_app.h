@@ -34,11 +34,11 @@ class ScalePieGraphApp : public ci::app::App {
   const double kMargin = 100;
 
  private:
+  void UpdateWaveform(ci::app::KeyEvent event);
+
   void UpdateScale(const std::string& new_scale_name);
 
   void UpdateText(const std::string& custom_text = "");
-
-  void CreateParamsWindow();
 
   const ci::Color kBackgroundColor = ci::Color("black");
   const size_t kMaxOctaves = 4;

@@ -90,37 +90,50 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 
 void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
   if (is_ready_) {
+    UpdateWaveform(event);
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_RIGHT:
         if (current_scale_idx_ == scale_names_.size() - 1) {
           break;
         }
-
         UpdateScale(scale_names_[current_scale_idx_++]);
         break;
       case ci::app::KeyEvent::KEY_LEFT:
         if (current_scale_idx_ == 0) {
           break;
         }
-
         UpdateScale(scale_names_[current_scale_idx_--]);
         break;
       case ci::app::KeyEvent::KEY_EQUALS:
         if (keyboard_.GetNumOctaves() == kMaxOctaves) {
           break;
         }
-
         keyboard_.SetNumOctaves(keyboard_.GetNumOctaves() + 1);
         break;
-
       case ci::app::KeyEvent::KEY_KP_MINUS:
         if (keyboard_.GetNumOctaves() == 1) {
           break; // Cannot have less than one octave
         }
-
         keyboard_.SetNumOctaves(keyboard_.GetNumOctaves() - 1);
         break;
     }
+  }
+}
+
+void ScalePieGraphApp::UpdateWaveform(ci::app::KeyEvent event) {
+  switch (event.getCode()) {
+    case ci::app::KeyEvent::KEY_q:
+      synthesizer_.SetWaveform(ci::audio::WaveformType::SINE);
+      break;
+    case ci::app::KeyEvent::KEY_w:
+      synthesizer_.SetWaveform(ci::audio::WaveformType::TRIANGLE);
+      break;
+    case ci::app::KeyEvent::KEY_e:
+      synthesizer_.SetWaveform(ci::audio::WaveformType::SQUARE);
+      break;
+    case ci::app::KeyEvent::KEY_r:
+      synthesizer_.SetWaveform(ci::audio::WaveformType::SAWTOOTH);
+      break;
   }
 }
 
