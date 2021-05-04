@@ -51,7 +51,8 @@ std::istream& operator>>(std::istream& input_stream, ScaleDataset& dataset) {
         frequencies.push_back(frequency.asFloat());
       }
 
-      num_octaves = std::ceil(frequencies.back() / frequencies.front());
+      num_octaves =
+          std::ceil(std::log2(frequencies.back() / frequencies.front()));
 
       Scale scale_to_append(name,
                             Scale::ConvertFrequenciesToCents(frequencies),

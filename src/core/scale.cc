@@ -121,14 +121,20 @@ double Scale::CalculateNoteFrequency(size_t note_index, float base_freq) const {
   size_t extra_octaves = note_index / (intervals_.size() + 1);
   note_index %= (intervals_.size() + 1);
 
-  if (note_index == 0) {
-    return base_freq * pow(2, extra_octaves);
+  if (note_index == 0 && extra_octaves) {
+    return base_freq * pow(2, extra_octaves + num_octaves_ - 1);
+  } else if (note_index == 0){
+    return base_freq;
   }
 
   double freq =
       base_freq * std::pow(2, (intervals_[note_index - 1] / kCentsInOctave));
 
-  return freq * pow(2, extra_octaves);
+  if (extra_octaves > 0) {
+    return freq * pow(2, extra_octaves + num_octaves_ - 1);
+  }
+
+  return freq;
 }
 
 float Scale::GetInterval(size_t inter_index) const {

@@ -245,6 +245,36 @@ TEST_CASE("Calculate Note Frequency Valid") {
 
     REQUIRE(freq == Approx(kExpectedFreq));
   }
+
+  SECTION("Multi-octave second octave") {
+    std::vector<float> bolivian_freqs = {440, 550, 653.125,
+                                         816.4062, 969.4824, 1151.2603,
+                                         1439.0754, 1708.9021};
+
+    std::vector<float> bolivian_intervals =
+        Scale::ConvertFrequenciesToCents(bolivian_freqs);
+
+    Scale test_scale("Bolivian", bolivian_intervals, "", 2);
+
+    double freq = test_scale.CalculateNoteFrequency(6);
+
+    REQUIRE(freq == Approx(bolivian_freqs[6]));
+  }
+
+  SECTION("Multi-octave second octave 8va") {
+    std::vector<float> bolivian_freqs = {440, 550, 653.125,
+                                         816.4062, 969.4824, 1151.2603,
+                                         1439.0754, 1708.9021};
+
+    std::vector<float> bolivian_intervals =
+        Scale::ConvertFrequenciesToCents(bolivian_freqs);
+
+    Scale test_scale("Bolivian", bolivian_intervals, "", 2);
+
+    double freq = test_scale.CalculateNoteFrequency(8);
+
+    REQUIRE(freq == Approx(4 * bolivian_freqs[0]));
+  }
 }
 
 TEST_CASE("Calculate Note Frequency Invalid") {
