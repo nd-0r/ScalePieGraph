@@ -147,6 +147,10 @@ size_t Scale::GetNumIntervals() const {
   return intervals_.size();
 }
 
+size_t Scale::GetNumNotes() const {
+  return GetNumIntervals() + 1;
+}
+
 std::vector<float> Scale::GetProportions() const {
   std::vector<float> proportions;
 

@@ -141,7 +141,7 @@ void ScalePieGraphApp::UpdateScale(const std::string& new_scale_name) {
       current_scale_.GetProportions());
   UpdateText();
 
-  keyboard_.UpdateDivisions(current_scale_.GetNumIntervals() + 1);
+  keyboard_.UpdateDivisions(current_scale_.GetNumNotes() + 1);
 }
 
 void ScalePieGraphApp::UpdateText(const std::string& custom_text) {

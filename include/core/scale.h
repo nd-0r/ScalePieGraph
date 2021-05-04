@@ -97,6 +97,14 @@ class Scale {
   size_t GetNumIntervals() const;
 
   /**
+   * Get the number of notes in this Scale. There is always
+   * one more note than interval.
+   *
+   * @return The number of notes in this Scale
+   */
+   size_t GetNumNotes() const;
+
+  /**
    * Get the cumulative intervals in this Scale as proportions between 0 and 1.
    *
    * @return The proportions in this Scale
