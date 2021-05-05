@@ -84,10 +84,9 @@ class Keyboard {
   float height_;
   size_t current_divisions_;
   size_t num_octaves_ = 1;
-
   std::vector<ci::Path2d> keys_;
 };
 
-}
+} // namespace frontend
 
-}
+} // namespace scalepiegraph

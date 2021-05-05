@@ -43,8 +43,6 @@ void PieGraph::Draw() {
   ci::gl::draw(outer_arc);
   ci::gl::draw(end_caps);
 
-  current_arc_ = outer_arc;
-
   CreateHandles(true);
 }
 

@@ -92,7 +92,6 @@ class PieGraph {
    */
   void CreateHandles(bool should_draw=true);
 
-  ci::Path2d current_arc_;
   std::vector<ci::Path2d> current_handles_;
   glm::vec2 center_;
   float radius_;

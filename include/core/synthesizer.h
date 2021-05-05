@@ -64,4 +64,4 @@ class Synthesizer {
   ci::audio::GainNodeRef gain_;
 };
 
-}
+} // namespace scalepiegraph
