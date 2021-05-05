@@ -51,6 +51,22 @@ class ScaleDataset {
   friend std::istream& operator>>(
       std::istream& input_stream, ScaleDataset& dataset);
  private:
+  /**
+   * Parse a scale's intervals represented in json to a Scale.
+   *
+   * @param context The json parsing context
+   * @return The parsed scale
+   */
+  static Scale ParseScaleFromIntervals(const Json::Value& context);
+
+  /**
+   * Parse a scale's frequencies represented in json to a Scale.
+   *
+   * @param context The json parsing context
+   * @return The parsed scale
+   */
+  static Scale ParseScaleFromFrequencies(const Json::Value& context);
+
   std::vector<std::string> names_;
   std::map<std::string, Scale> scales_by_name_;
 
