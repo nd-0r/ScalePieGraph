@@ -41,7 +41,6 @@ void ScalePieGraphApp::mouseDown(ci::app::MouseEvent event) {
   if (is_ready_) {
     last_graph_ = graph_;
     current_handle_idx_ = graph_.GetHandleIndex(event.getPos());
-    std::cout << current_handle_idx_ << std::endl;
     last_mouse_down_pos_ = event.getPos();
 
     int key_idx = keyboard_.GetKeyIndex(event.getPos());
@@ -97,13 +96,13 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
         if (current_scale_idx_ == scale_names_.size() - 1) {
           break;
         }
-        UpdateScale(scale_names_[current_scale_idx_++]);
+        UpdateScale(scale_names_[++current_scale_idx_]);
         break;
       case ci::app::KeyEvent::KEY_LEFT:
         if (current_scale_idx_ == 0) {
           break;
         }
-        UpdateScale(scale_names_[current_scale_idx_--]);
+        UpdateScale(scale_names_[--current_scale_idx_]);
         break;
       case ci::app::KeyEvent::KEY_EQUALS:
         if (keyboard_.GetNumOctaves() == kMaxOctaves) {
