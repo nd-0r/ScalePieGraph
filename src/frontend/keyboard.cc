@@ -96,6 +96,6 @@ size_t Keyboard::GetNumOctaves() const {
   return num_octaves_;
 }
 
-}
+} // namespace frontend
 
-}
+} // namespace scalepiegraph

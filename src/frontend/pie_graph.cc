@@ -89,7 +89,7 @@ bool PieGraph::UpdateHandle(size_t handle_index, glm::vec2 mouse_pos) {
   for (size_t current_handle_idx = handle_index;
        current_handle_idx < division_radians_.size();
        ++current_handle_idx) {
-    division_radians_[current_handle_idx] += diff;
+    division_radians_[current_handle_idx] += diff; // Update handles
   }
 
   return true; // Portion successfully resized
@@ -134,6 +134,7 @@ void PieGraph::CreateHandles(bool should_draw) {
           glm::vec2(handle_point.x - x_buffer, handle_point.y + y_buffer);
     }
 
+    // Create the handle circles
     ci::Path2d handle;
     handle.arc(handle_point, kHandleRadius, 0, 2 * glm::pi<float>());
     handle.close();

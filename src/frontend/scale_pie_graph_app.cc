@@ -31,7 +31,7 @@ void ScalePieGraphApp::draw() {
 
   ci::gl::drawStringCentered(
       title_,
-      glm::vec2(current_width_ / 2, kMargin / 2), ci::Color("white"));
+      glm::vec2(current_width_ / 2, kMargin / 2), kTextColor);
 
   ci::gl::draw(text_box_texture_,
                glm::vec2(2 * current_width_ / 3, current_height_ / 4));
@@ -73,8 +73,7 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
   if (is_ready_) {
     glm::vec2 mouse_pos(event.getPos());
 
-    if ((glm::distance2(mouse_pos, last_mouse_down_pos_) > 1) &&
-        current_handle_idx_ >= 0) {
+    if (current_handle_idx_ >= 0) {
       graph_.UpdateHandle(current_handle_idx_, mouse_pos);
     }
 
@@ -91,6 +90,7 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
     UpdateWaveform(event);
     HandleKeyboardNotes(event);
     HandleTransposition(event);
+
     switch (event.getCode()) {
       case ci::app::KeyEvent::KEY_RIGHT:
         if (current_scale_idx_ == scale_names_.size() - 1) {
@@ -98,18 +98,21 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
         }
         UpdateScale(scale_names_[++current_scale_idx_]);
         break;
+
       case ci::app::KeyEvent::KEY_LEFT:
         if (current_scale_idx_ == 0) {
           break;
         }
         UpdateScale(scale_names_[--current_scale_idx_]);
         break;
+
       case ci::app::KeyEvent::KEY_EQUALS:
         if (keyboard_.GetNumOctaves() == kMaxOctaves) {
           break;
         }
         keyboard_.SetNumOctaves(keyboard_.GetNumOctaves() + 1);
         break;
+
       case ci::app::KeyEvent::KEY_KP_MINUS:
         if (keyboard_.GetNumOctaves() == 1) {
           break; // Cannot have less than one octave
@@ -191,6 +194,7 @@ void ScalePieGraphApp::HandleTransposition(ci::app::KeyEvent event) {
       }
       ++current_transposition_;
       break;
+
     case ci::app::KeyEvent::KEY_DOWN:
       if (current_transposition_ == 0) {
         break; // No less notes in the base scale
@@ -239,7 +243,7 @@ void ScalePieGraphApp::UpdateText(const std::string& custom_text) {
   ci::TextBox text_box = ci::TextBox().alignment(ci::TextBox::LEFT).size(
       glm::vec2((current_width_ - kMargin) / 3.0, ci::TextBox::GROW));
 
-  text_box.text(info_).color(ci::Color("white"));
+  text_box.text(info_).color(kTextColor);
 
   text_box_texture_ = ci::gl::Texture2d::create(text_box.render());
 }
