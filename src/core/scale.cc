@@ -56,9 +56,10 @@ Scale::Scale(size_t num_divisions) {
 
   float inter_size = kCentsInOctave / num_divisions;
   float current_span = 0;
+
+  // Create cumulative intervals
   for (size_t inter_index = 0; inter_index < num_divisions - 1; ++inter_index) {
     current_span += inter_size;
-
     intervals_[inter_index] = current_span;
   }
 }
@@ -231,6 +232,7 @@ std::vector<float> Scale::ConvertDiatonicIntervalsToCents(
        interval_idx < diatonic_intervals.size();
        ++interval_idx) {
     size_t current_interval = diatonic_intervals[interval_idx];
+
     if (current_interval < 0 || current_interval > 11) {
       throw std::out_of_range("Provided diatonic intervals out of range");
     }
@@ -258,6 +260,7 @@ std::vector<float> Scale::ConvertFrequenciesToCents(
        ++freq_idx) {
     float cents_interval =
         kCentsInOctave * std::log2(frequencies[freq_idx] / frequencies[0]);
+
     cents_intervals.push_back(cents_interval - last_interval);
     last_interval = cents_interval;
   }
@@ -265,6 +268,4 @@ std::vector<float> Scale::ConvertFrequenciesToCents(
   return cents_intervals;
 }
 
-
-}
-
+} // namespace scalepiegraph

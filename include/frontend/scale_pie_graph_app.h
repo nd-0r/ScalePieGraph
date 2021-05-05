@@ -36,6 +36,7 @@ class ScalePieGraphApp : public ci::app::App {
 
  private:
   const ci::Color kBackgroundColor = ci::Color("black");
+  const ci::Color kTextColor = ci::Color("white");
   const size_t kMaxOctaves = 4;
 
   /**

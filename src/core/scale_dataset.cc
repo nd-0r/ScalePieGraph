@@ -37,7 +37,6 @@ std::istream& operator>>(std::istream& input_stream, ScaleDataset& dataset) {
     } else {
       throw std::runtime_error("Provided scale has no notes.");
     }
-
   }
 
   return input_stream;

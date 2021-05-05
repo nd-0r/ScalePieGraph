@@ -58,4 +58,4 @@ void Synthesizer::SetFilter(float cutoff) {
   filter_->setCutoffFreq(cutoff);
 }
 
-}
+} // namespace scalepiegraph
