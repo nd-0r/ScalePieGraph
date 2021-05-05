@@ -1,6 +1,6 @@
 # Interactive Scale Pie Graph
 
-![](https://imgur.com/a/iEKKPJO)
+![](https://imgur.com/TFRwULf)
 
 ## Introduction
 
