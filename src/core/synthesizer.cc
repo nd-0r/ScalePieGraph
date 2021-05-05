@@ -50,10 +50,6 @@ void Synthesizer::SetWaveform(
   oscillator_->setWaveform(waveform_type);
 }
 
-void Synthesizer::SetGain(float gain) {
-  gain_->setValue(gain);
-}
-
 void Synthesizer::SetFilter(float cutoff) {
   if (cutoff < kFrequencyMin || cutoff > kFrequencyMax) {
     throw std::runtime_error("Cutoff out of synthesizer range.");

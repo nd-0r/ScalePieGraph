@@ -69,7 +69,6 @@ class ScaleDataset {
 
   std::vector<std::string> names_;
   std::map<std::string, Scale> scales_by_name_;
-
 };
 
-}
+} // namespace scalepiegraph

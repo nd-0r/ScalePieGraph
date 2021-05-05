@@ -16,7 +16,6 @@ namespace scalepiegraph {
  */
 class Synthesizer {
  public:
-
   /**
    * Create a Synthesizer by initializing the audio context and patching the
    * required effect and generator nodes.
@@ -50,21 +49,11 @@ class Synthesizer {
   void SetWaveform(ci::audio::WaveformType waveform_type) const;
 
   /**
-   * Set the gain of this Synthesizer.
-   *
-   * @param gain The gain at which to set this Synthesizer
-   */
-  void SetGain(float gain);
-
-  /**
    * Set the cutoff frequency of this Synthesizer's filter.
    *
    * @param cutoff The cutoff at which to set this Synthesizer's filter
    */
   void SetFilter(float cutoff);
-
-  // TODO - Implement
-  void SetEnvelope(float attack, float delay, float sustain, float release);
  private:
   const double kFrequencyMax = 20000;
   const double kFrequencyMin = 20;

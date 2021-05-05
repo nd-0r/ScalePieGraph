@@ -109,7 +109,7 @@ class Scale {
    *
    * @return The proportions in this Scale
    */
-  std::vector<float> GetProportions() const;
+   std::vector<float> GetProportions() const;
 
   /**
    * Get the name of this Scale.
@@ -150,8 +150,6 @@ class Scale {
    */
   bool operator!=(const Scale& other_scale) const;
 
-  static const float kCentsInOctave;
-
   /**
    * Convert proportions, in the range 0 inclusive to 1 inclusive, of a
    * specified number of octaves to log-scale cents.
@@ -182,6 +180,8 @@ class Scale {
    */
   static std::vector<float> ConvertFrequenciesToCents(
       const std::vector<float>& frequencies);
+
+  static const float kCentsInOctave;
  private:
   std::string name_;
   std::string description_;
