@@ -79,8 +79,11 @@ void ScalePieGraphApp::mouseDrag(ci::app::MouseEvent event) {
 
     int key_idx = keyboard_.GetKeyIndex(event.getPos());
     if (key_idx >= 0) {
-      synthesizer_.SetFrequency(current_scale_.CalculateNoteFrequency(
-          key_idx, base_scale_.CalculateNoteFrequency(current_transposition_)));
+      try {
+        synthesizer_.SetFrequency(current_scale_.CalculateNoteFrequency(
+            key_idx, base_scale_.CalculateNoteFrequency(
+                current_transposition_)));
+      } catch (std::runtime_error&) {}
     }
   }
 }
@@ -124,8 +127,10 @@ void ScalePieGraphApp::keyDown(ci::app::KeyEvent event) {
 }
 
 void ScalePieGraphApp::StartSynthesizer(size_t note_idx) {
-  synthesizer_.Start(current_scale_.CalculateNoteFrequency(
-      note_idx, base_scale_.CalculateNoteFrequency(current_transposition_)));
+  try {
+    synthesizer_.Start(current_scale_.CalculateNoteFrequency(
+        note_idx, base_scale_.CalculateNoteFrequency(current_transposition_)));
+  } catch (std::runtime_error&) {}
 }
 
 void ScalePieGraphApp::UpdateWaveform(ci::app::KeyEvent event) {
