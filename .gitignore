@@ -60,6 +60,7 @@ Temporary Items
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+.vscode
 # Created by https://www.gitignore.io/api/c++,cmake,clion
 # Edit at https://www.gitignore.io/?templates=c++,cmake,clion
 
